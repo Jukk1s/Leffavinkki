@@ -9,7 +9,15 @@ app.use(express.static('public'));
 app.get('/index.htm', function (req, res) {
     res.sendFile( __dirname + "/" + "index.htm" );
 })
-app.post('/process_post', urlencodedParser,
+
+// parametrien kirjoitustapa selaimessa : http://localhost:8081/api/showmovie?n=elokuvannimi&y=elokuvanvuosi
+app.get('/showmovie', function(req,res){
+    console.log('Elokuvan tiedot :)');
+    var q = url.parse(req.url, true).query;//movie_name movie_year
+    var name = q.n;
+    var year = q.y;
+})
+/*app.post('/process_post', urlencodedParser,
     [check('first_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),
         check('last_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),
         check('email').isEmail().withMessage("sähköposti on väärän muotoinen!"),
@@ -31,7 +39,7 @@ app.post('/process_post', urlencodedParser,
         };
         console.log(response);
         res.end(JSON.stringify(response));
-    })
+    })*/
 var server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
