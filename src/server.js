@@ -1,15 +1,41 @@
 const { check, validationResult} = require('express-validator');
+
 //Arttu testaa vähä githubbii
+
 var express = require('express');
+
 var app = express();
+
 var bodyParser = require('body-parser');
+
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+const mysql = require('mysql');
+const conn = mysql.createConnection({
+    host: '//mysql.metropolia.fi/eljash',
+    user: 'eljash',
+    password:'r3dDevil',
+    database: 'eljash'});
+
+conn.connect(function(err){
+    if (err) throw err;
+    console.log("Connected to MySQL");
+})
+
 app.use(express.static('public'));
 app.get('/index.htm', function (req, res) {
     res.sendFile( __dirname + "/" + "index.htm" );
 })
-app.post('/process_post', urlencodedParser,
+
+// parametrien kirjoitustapa selaimessa : http://localhost:8081/api/showmovie?n=elokuvannimi&y=elokuvanvuosi
+app.get('/showmovie', function(req,res){
+    console.log('Elokuvan tiedot :)');
+    var q = url.parse(req.url, true).query;//movie_name movie_year
+    var name = q.n;
+    var year = q.y;
+})
+/*app.post('/process_post', urlencodedParser,
     [check('first_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),
         check('last_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),
         check('email').isEmail().withMessage("sähköposti on väärän muotoinen!"),
@@ -31,7 +57,17 @@ app.post('/process_post', urlencodedParser,
         };
         console.log(response);
         res.end(JSON.stringify(response));
-    })
+    })*/
+
+/* SERVER */
+
+var cookieParser = require('cookie-parser')
+app.use(cookieParser())
+app.get('/', function(req, res) {
+    console.log("Cookies: ", req.cookies);
+    res.send('TESTI');
+})
+
 var server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
