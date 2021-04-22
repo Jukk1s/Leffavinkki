@@ -2,15 +2,30 @@
 body {
     font-family: Arial, Verdana, sans-serif;
     background-color: darkgrey;
+    overflow: scroll;
 }
+
+img {
+    width: 70%;
+    height: auto;
+}
+
+#resultField {
+    position: absolute;
+    left: 3%;
+    top: 10%;
+    max-width: 25%;
+}
+
 
 #hakukentta {
     position: fixed;
-    right: 16px;
-    top: 76px;
-    border: 5px solid black;
-    width: 400px;
-    height: 400px;
+    right: 3%; /* 16px */
+    top: 12%; /* 76px */
+    border: 5px solid black; /* 5px */
+    width: 25%;
+    height: 30%;
+    padding: 1%;
     font-size: larger;
 }
 
