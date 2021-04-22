@@ -1,10 +1,10 @@
 const { check, validationResult} = require('express-validator');
 
-//Arttu testaa vähä githubbii
-
 var express = require('express');
 
 var app = express();
+
+var url = require('url');
 
 var bodyParser = require('body-parser');
 
@@ -12,29 +12,113 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 const mysql = require('mysql');
-const conn = mysql.createConnection({
-    host: '//mysql.metropolia.fi/eljash',
-    user: 'eljash',
-    password:'r3dDevil',
-    database: 'eljash'});
+const isLocalhost = true;
+var conn = mysql;
+
+//Koitetaan ottaa yhteyttä muuttujan "isLocalhost" mukaan
+if(isLocalhost){
+    conn = mysql.createConnection({
+        host: "localhost",
+        user: "client",
+        password: "client",
+        database: "web_projekti"
+    });
+} else {
+    conn = mysql.createConnection({
+        host: '//mysql.metropolia.fi/eljash',
+        user: 'eljash',
+        password:'r3dDevil',
+        database: 'eljash'});
+}
 
 conn.connect(function(err){
     if (err) throw err;
     console.log("Connected to MySQL");
+});
+
+var util = require('util');
+const query = util.promisify(conn.query).bind(conn);
+
+app.get('/users', (req, res) => {
+    var sql = "SELECT * FROM users";
+    var string;
+    (async () => {
+        try {
+            const rows = await query(sql);
+            console.log(rows);
+            string = JSON.stringify(rows);
+            console.log(string);
+            res.send(string);
+        }
+        catch (err){
+            console.log("Database error!"+err);
+        }
+        finally {
+
+        }
+    })()
+});
+
+//http://localhost:8081/users/new?name=nimi&password=salasana&email=sähköposti
+//http://localhost:8081/users/new?name=&password=&email=
+app.post('/users/new', (req,res) => {
+    var q = url.parse(req.url, true).query;
+    const user = { name: q.name, email: q.email, password: q.password };
+    const name = user.name;
+    const password = user.password;
+    const email = user.email;
+    var sql = "SELECT * FROM users WHERE name = ? OR email = ?";
+    var string;
+    (async () => {
+        try {
+            const rows = await query(sql, [name, email]);
+
+            string = JSON.stringify(rows);
+            if(rows.length > 0){
+                res.send("User '"+ name +"' or email '"+email+"' is already in use");
+            } else {
+
+                sql = "INSERT INTO users (name, email, password) "
+                + "VALUES (?, ?, SHA1(?))"
+
+                console.log(name+" "+email+" "+password);
+
+                const rows2 = await query(sql, [name, email, password]);
+                string = JSON.stringify(rows2);
+                console.log(string);
+                const newUserId = rows2.insertId;
+                console.log("id: "+newUserId);
+                sql = "INSERT INTO profiles (id) "
+                + "VALUES (?)"
+                const rows3 = await query(sql, [newUserId]);
+                res.send(string);
+            }
+        }
+        catch (err){
+            console.log("Database error!"+err);
+        }
+        finally {
+
+        }
+    })();
+});
+
+app.post('/users/login', async (req, res) => {
+    const user = "";
 })
 
 app.use(express.static('public'));
 app.get('/index.htm', function (req, res) {
     res.sendFile( __dirname + "/" + "index.htm" );
-})
+});
 
-// parametrien kirjoitustapa selaimessa : http://localhost:8081/api/showmovie?n=elokuvannimi&y=elokuvanvuosi
+// parametrien kirjoitustapa selaimessa : http://localhost:8081/showmovie?n=elokuvannimi&y=elokuvanvuosi
 app.get('/showmovie', function(req,res){
     console.log('Elokuvan tiedot :)');
     var q = url.parse(req.url, true).query;//movie_name movie_year
     var name = q.n;
     var year = q.y;
-})
+});
 /*app.post('/process_post', urlencodedParser,
     [check('first_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),
         check('last_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),
@@ -66,11 +150,11 @@ app.use(cookieParser())
 app.get('/', function(req, res) {
     console.log("Cookies: ", req.cookies);
     res.send('TESTI');
-})
+});
 
 var server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
 
     console.log("Example app listening at http://%s:%s", host, port)
-})
+});
