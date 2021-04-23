@@ -8,6 +8,10 @@ var url = require('url');
 
 var bodyParser = require('body-parser');
 
+var cors = require('cors');
+
+app.use(cors());
+
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -39,7 +43,7 @@ conn.connect(function(err){
 var util = require('util');
 const query = util.promisify(conn.query).bind(conn);
 
-app.get('/users', (req, res) => {
+app.get('/users', cors(), (req, res) => {
     var sql = "SELECT * FROM users";
     var string;
     (async () => {
@@ -61,7 +65,7 @@ app.get('/users', (req, res) => {
 
 //http://localhost:8081/users/new?name=nimi&password=salasana&email=sähköposti
 //http://localhost:8081/users/new?name=&password=&email=
-app.post('/users/new', (req,res) => {
+app.post('/users/new', cors(), (req,res) => {
     var q = url.parse(req.url, true).query;
     const user = { name: q.name, email: q.email, password: q.password };
     const name = user.name;
@@ -103,21 +107,27 @@ app.post('/users/new', (req,res) => {
     })();
 });
 
-app.post('/users/login', async (req, res) => {
+app.post('/users/login',cors(), async (req, res) => {
     const user = "";
 })
 
 app.use(express.static('public'));
-app.get('/index.htm', function (req, res) {
+app.get('/index.htm',cors(), function (req, res) {
     res.sendFile( __dirname + "/" + "index.htm" );
 });
 
-// parametrien kirjoitustapa selaimessa : http://localhost:8081/showmovie?n=elokuvannimi&y=elokuvanvuosi
-app.get('/showmovie', function(req,res){
-    console.log('Elokuvan tiedot :)');
-    var q = url.parse(req.url, true).query;//movie_name movie_year
-    var name = q.n;
-    var year = q.y;
+
+app.post('/showmovie',cors(), function(req,res){
+
+    console.log('Elokuvan tiedot '+req.body);
+
+
+    //VANHOJA IDEOITA: EI TARVITSE HUOMIOIDA
+    // parametrien kirjoitustapa selaimessa : http://localhost:8081/showmovie?n=elokuvannimi&y=elokuvanvuosi
+    //var q = url.parse(req.url, true).query;//movie_name movie_year
+    //var name = q.n;
+    //var year = q.y;
+
 });
 /*app.post('/process_post', urlencodedParser,
     [check('first_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),
