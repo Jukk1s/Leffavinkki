@@ -38,7 +38,10 @@ function showResults(jsonResponse) {
     div.innerHTML = "";
 
     for (let i = 0; i < Object.keys(jsonResponse.Search).length; i++) {
-        //Jokaiselle elokuvalle oma div elementti
+        //Jokaiselle elokuvalle oma a- ja div -elementti
+        let movieLink = document.createElement("a");
+        movieLink.href = "movie.html";
+
         let movieDiv = document.createElement("div");
         movieDiv.className = "movieDiv";
         let h = document.createElement("h3");
@@ -50,7 +53,7 @@ function showResults(jsonResponse) {
 
 
         movieDiv.addEventListener('click', function(){
-            //console.log(data);
+            console.log(data);
             openMovie(data);
         });
 
@@ -63,11 +66,16 @@ function showResults(jsonResponse) {
         img.alt = "Poster of " + jsonResponse.Search[i].Title;
         movieDiv.appendChild(img);
 
-        div.appendChild(movieDiv);
+        movieLink.appendChild(movieDiv);
+        div.appendChild(movieLink);
     }
 }
 
 function openMovie(data){
+
+    // Tallennetaan localStorageen data, jotta voidaan toiselta sivulta se hakea
+    localStorage.setItem("movieData", JSON.stringify(data));
+
     console.log(data);
     console.log(data.Title);
     console.log(data.Poster);
