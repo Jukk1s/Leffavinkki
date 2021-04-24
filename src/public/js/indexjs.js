@@ -43,7 +43,10 @@ function showResults(jsonResponse) {
     for (let i = 0; i < Object.keys(jsonResponse.Search).length; i++) {
         //Jokaiselle elokuvalle oma a- ja div -elementti
         let movieLink = document.createElement("a");
-        movieLink.href = "movie.html";
+
+        console.log(jsonResponse.Search[i].imdbID);
+
+        movieLink.href = "http://localhost:8081/movie?id="+jsonResponse.Search[i].imdbID;
 
         let movieDiv = document.createElement("div");
         movieDiv.className = "movieDiv";

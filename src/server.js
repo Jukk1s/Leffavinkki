@@ -158,27 +158,38 @@ app.post('/showmovie',cors(), function(req,res){
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/index.htm',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "index.htm" );
+    res.writeHead(301,
+        {Location: '/'}
+    );
+    res.end();
 });
 app.get('/index.html',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "index.html" );
+    res.writeHead(301,
+        {Location: '/'}
+    );
+    res.end();
 });
 app.get('/index',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "index.html" );
+    res.writeHead(301,
+        {Location: '/'}
+    );
+    res.end();
 });
 app.get('/',cors(), function (req, res) {
     res.sendFile( __dirname + "/views/" + "index.html" );
 });
 app.get('/home',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "index.html" );
+    res.writeHead(301,
+        {Location: '/'}
+    );
+    res.end();
 });
-app.get('',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "index.html" );
-});
-
 
 app.get('/credits.html',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "credits.html" );
+    res.writeHead(301,
+        {Location: '/credits'}
+    );
+    res.end();
 });
 app.get('/credits',cors(), function (req, res) {
     res.sendFile( __dirname + "/views/" + "credits.html" );
@@ -194,7 +205,10 @@ app.get('/movie',cors(), function (req, res) {
 
 
 app.get('/login.html',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "login.html" );
+    res.writeHead(301,
+        {Location: '/login'}
+    );
+    res.end();
 });
 app.get('/login',cors(), function (req, res) {
     res.sendFile( __dirname + "/views/" + "login.html" );
