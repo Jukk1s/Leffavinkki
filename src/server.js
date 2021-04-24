@@ -113,15 +113,6 @@ app.post('/users/login',cors(), async (req, res) => {
     const user = "";
 })
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('/index.htm',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "index.htm" );
-});
-app.get('/index.html',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "index.html" );
-});
-
-
 app.post('/showmovie',cors(), function(req,res){
 
     console.log('Elokuvan tiedot '+req.body);
@@ -157,6 +148,57 @@ app.post('/showmovie',cors(), function(req,res){
         console.log(response);
         res.end(JSON.stringify(response));
     })*/
+
+/* ------------------------------- */
+/* ------------------------------- */
+/* --           URLIT           -- */
+/* ------------------------------- */
+/* ------------------------------- */
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/index.htm',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "index.htm" );
+});
+app.get('/index.html',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "index.html" );
+});
+app.get('/index',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "index.html" );
+});
+app.get('/',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "index.html" );
+});
+app.get('/home',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "index.html" );
+});
+app.get('',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "index.html" );
+});
+
+
+app.get('/credits.html',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "credits.html" );
+});
+app.get('/credits',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "credits.html" );
+});
+
+
+app.get('/movie.html',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "movie.html" );
+});
+app.get('/movie',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "movie.html" );
+});
+
+
+app.get('/login.html',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "login.html" );
+});
+app.get('/login',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "login.html" );
+});
 
 /* SERVER */
 
