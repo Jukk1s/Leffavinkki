@@ -10,6 +10,8 @@ var bodyParser = require('body-parser');
 
 var cors = require('cors');
 
+var path = require('path');
+
 app.use(cors());
 
 // Create application/x-www-form-urlencoded parser
@@ -111,9 +113,12 @@ app.post('/users/login',cors(), async (req, res) => {
     const user = "";
 })
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.get('/index.htm',cors(), function (req, res) {
-    res.sendFile( __dirname + "/" + "index.htm" );
+    res.sendFile( __dirname + "/views/" + "index.htm" );
+});
+app.get('/index.html',cors(), function (req, res) {
+    res.sendFile( __dirname + "/views/" + "index.html" );
 });
 
 

@@ -109,6 +109,7 @@ function showLastSearch(){
     let jsonData = JSON.parse(data);
 
     //Jos löytyy vähintään yksi JSON objekti niin näytetään tulokset
-    if(data.length > 0)
+    if(data !== null)
+        if(data.length > 0)
         showResults(jsonData);
 }
