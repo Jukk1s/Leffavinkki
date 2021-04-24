@@ -22,6 +22,7 @@ function getMovies() {
             if(response){
                 const jsonResponse = await response.json();
                 console.log(jsonResponse);
+                localStorage.setItem("lastSearch", JSON.stringify(jsonResponse));
                 showResults(jsonResponse);
             }
         }catch(error){
@@ -32,6 +33,8 @@ function getMovies() {
 
 function showResults(jsonResponse) {
     // console.log(Object.keys(jsonResponse.Search).length);
+
+    console.log(jsonResponse);
 
     const div = document.getElementById("resultField");
     //Tyhjennetään tuloskenttä ennen elokuvien näyttämistä
@@ -95,4 +98,17 @@ function openMovie(data){
     xhr.send(data);
 
      */
+}
+
+//Avataan paikallisesta muistista viimeisin haku
+//index.htm:n body kutsuu tätä funktiota "onload"
+function showLastSearch(){
+
+    console.log("hei...");
+    let data = localStorage.getItem("lastSearch");
+    let jsonData = JSON.parse(data);
+
+    //Jos löytyy vähintään yksi JSON objekti niin näytetään tulokset
+    if(data.length > 0)
+        showResults(jsonData);
 }
