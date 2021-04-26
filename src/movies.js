@@ -1,4 +1,4 @@
-module.exports = function(app, cors) {
+module.exports = function(app, cors, url, query) {
     app.post('/showmovie',cors(), function(req,res){
 
         console.log('Elokuvan tiedot '+req.body);
