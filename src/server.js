@@ -14,10 +14,10 @@ var path = require('path');
 
 var http = require('http');
 
-app.use(cors());
+var util = require('util');
 
-// Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 
 const mysql = require('mysql');
 const isLocalhost = true;
@@ -44,137 +44,16 @@ conn.connect(function(err){
     console.log("Connected to MySQL");
 });
 
-var util = require('util');
+
 const query = util.promisify(conn.query).bind(conn);
 
-app.get('/users', cors(), (req, res) => {
-    var sql = "SELECT * FROM users";
-    var string;
-    (async () => {
-        try {
-            const rows = await query(sql);
-            console.log(rows);
-            string = JSON.stringify(rows);
-            console.log(string);
-            res.send(string);
-        }
-        catch (err){
-            console.log("Database error!"+err);
-        }
-        finally {
+app.use(cors());
 
-        }
-    })()
-});
+app.use(express.static(path.join(__dirname, 'public')));
 
-//http://localhost:8081/users/new?name=nimi&password=salasana&email=sähköposti
-//http://localhost:8081/users/new?name=&password=&email=
-app.post('/users/new', cors(), (req,res) => {
-    var q = url.parse(req.url, true).query;
-    const user = { name: q.name, email: q.email, password: q.password };
-    const name = user.name;
-    const password = user.password;
-    const email = user.email;
-    var sql = "SELECT * FROM users WHERE name = ? OR email = ?";
-    var string;
-    (async () => {
-        try {
-            const rows = await query(sql, [name, email]);
-
-            string = JSON.stringify(rows);
-            if(rows.length > 0){
-                res.send("User '"+ name +"' or email '"+email+"' is already in use");
-            } else {
-
-                sql = "INSERT INTO users (name, email, password) "
-                + "VALUES (?, ?, SHA1(?))"
-
-                console.log(name+" "+email+" "+password);
-
-                const rows2 = await query(sql, [name, email, password]);
-                string = JSON.stringify(rows2);
-                console.log(string);
-                const newUserId = rows2.insertId;
-                console.log("id: "+newUserId);
-                sql = "INSERT INTO profiles (id) "
-                + "VALUES (?)"
-                const rows3 = await query(sql, [newUserId]);
-                res.send(string);
-            }
-        }
-        catch (err){
-            console.log("Database error!"+err);
-        }
-        finally {
-
-        }
-    })();
-});
-
-app.post('/users/login',cors(), async (req, res) => {
-    const user = "";
-})
-
-app.post('/showmovie',cors(), function(req,res){
-
-    console.log('Elokuvan tiedot '+req.body);
-
-
-    //VANHOJA IDEOITA: EI TARVITSE HUOMIOIDA
-    // parametrien kirjoitustapa selaimessa : http://localhost:8081/showmovie?n=elokuvannimi&y=elokuvanvuosi
-    //var q = url.parse(req.url, true).query;//movie_name movie_year
-    //var name = q.n;
-    //var year = q.y;
-
-});
-
-//showcomments?id=elokuvanid
-app.get('/showcomments', cors(), (req,res)=>{
-    var q = url.parse(req.url, true).query;
-    const movieId = q.id;
-    var sql = "SELECT * FROM reviews WHERE movie_id = ?";
-    var string;
-    (async () => {
-        try {
-            const rows = await query(sql, [movieId]);
-
-            string = JSON.stringify(rows);
-
-            sql = "SELECT * FROM comments WHERE reviews_id = ?";
-
-            var returnArray = [];
-
-            //console.log(string);
-            for(var i = 0; i < rows.length; i++){
-                if(rows[i].hasOwnProperty('id')) {
-                    const rows2 = await query(sql, rows[i].id);
-                    for(var l = 0; l < rows2.length; l++){
-                        returnArray.push(rows2[l]);
-                    }
-
-                    /*
-                    if(JSON.stringify(returnArray) === "{}")
-                        returnArray = rows2;
-                    else
-                        returnArray.push(rows2);
-
-                     */
-                    string = JSON.stringify(rows2);
-                    //console.log(string);
-                }
-            }
-            console.log(returnArray);
-            res.json(returnArray);
-
-        }
-        catch (err){
-            console.log("Database error!"+err);
-        }
-        finally {
-
-        }
-    })();
-})
+require('./routes')(app, cors);
+require('./users')(app, cors, url, query);
+require('./movies')(app,cors, url, query);
 
 /*app.post('/process_post', urlencodedParser,
     [check('first_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),
@@ -200,70 +79,6 @@ app.get('/showcomments', cors(), (req,res)=>{
         res.end(JSON.stringify(response));
     })*/
 
-/* ------------------------------- */
-/* ------------------------------- */
-/* --           URLIT           -- */
-/* ------------------------------- */
-/* ------------------------------- */
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/index.htm',cors(), function (req, res) {
-    res.writeHead(301,
-        {Location: '/'}
-    );
-    res.end();
-});
-app.get('/index.html',cors(), function (req, res) {
-    res.writeHead(301,
-        {Location: '/'}
-    );
-    res.end();
-});
-app.get('/index',cors(), function (req, res) {
-    res.writeHead(301,
-        {Location: '/'}
-    );
-    res.end();
-});
-app.get('/',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "index.html" );
-});
-app.get('/home',cors(), function (req, res) {
-    res.writeHead(301,
-        {Location: '/'}
-    );
-    res.end();
-});
-
-app.get('/credits.html',cors(), function (req, res) {
-    res.writeHead(301,
-        {Location: '/credits'}
-    );
-    res.end();
-});
-app.get('/credits',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "credits.html" );
-});
-
-
-app.get('/movie.html',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "movie.html" );
-});
-app.get('/movie',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "movie.html" );
-});
-
-
-app.get('/login.html',cors(), function (req, res) {
-    res.writeHead(301,
-        {Location: '/login'}
-    );
-    res.end();
-});
-app.get('/login',cors(), function (req, res) {
-    res.sendFile( __dirname + "/views/" + "login.html" );
-});
 
 /* SERVER */
 
