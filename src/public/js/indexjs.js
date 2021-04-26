@@ -1,6 +1,38 @@
-const nodeServer = "localhost:8081";
+const nodeServer = "http://localhost:8081";
 
 function getMovies() {
+    <!--         UUSI TAPA             -->
+    <!--    HAETAAN NODE SERVERILTÄ    -->
+
+    let name = document.getElementById("movie_name").value.replace(/  +/g, '%20');
+    let year = Number(document.getElementById("movie_year").value);
+
+    let movieYear = "";
+
+    if(year > 1800 && Number.isInteger(year)){
+        movieYear = "&y=" + year;
+    }
+
+    let url = nodeServer + "/movies?s=";
+
+    (async () => {
+        console.log(url + name + movieYear + ", " + Number.isInteger(year) + year);
+        try{
+            const response = await fetch(url + name + movieYear);
+            if(response){
+                const jsonResponse = await response.json();
+                console.log(jsonResponse);
+                localStorage.setItem("lastSearch", JSON.stringify(jsonResponse));
+                showResults(jsonResponse);
+            }
+        }catch(error){
+            console.log(error);
+        }
+    })();
+
+
+    <!--         VANHA TAPA            -->
+    /*
     //document.getElementById("resultField").innerHTML = "";
 
     let name = document.getElementById("movie_name").value.replace(/  +/g, '%20');
@@ -28,7 +60,9 @@ function getMovies() {
         }catch(error){
             console.log(error);
         }
-    })()
+    })();
+
+     */
 }
 
 function showResults(jsonResponse) {
@@ -115,4 +149,5 @@ function showLastSearch(){
     if(data !== null)
         if(data.length > 0)
         showResults(jsonData);
+
 }

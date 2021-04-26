@@ -1,6 +1,7 @@
 //Serverin reitit
 
 module.exports = function(app, cors) {
+
     app.get('/index.htm',cors(), function (req, res) {
         res.writeHead(301,
             {Location: '/'}

@@ -16,8 +16,12 @@ var http = require('http');
 
 var util = require('util');
 
+const fetch = require("node-fetch");
+
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 const mysql = require('mysql');
 const isLocalhost = true;
@@ -47,13 +51,9 @@ conn.connect(function(err){
 
 const query = util.promisify(conn.query).bind(conn);
 
-app.use(cors());
-
-app.use(express.static(path.join(__dirname, 'public')));
-
 require('./routes')(app, cors);
 require('./users')(app, cors, url, query);
-require('./movies')(app,cors, url, query);
+require('./movies')(app,cors, url, query, fetch);
 
 /*app.post('/process_post', urlencodedParser,
     [check('first_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),

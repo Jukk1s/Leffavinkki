@@ -1,6 +1,7 @@
 //Kirjautuminen - rekisteröityminen
 
 module.exports = function(app, cors, url, query) {
+
     app.get('/users', cors(), (req, res) => {
         var sql = "SELECT * FROM users";
         var string;

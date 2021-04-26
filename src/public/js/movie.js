@@ -16,7 +16,7 @@ function showMovie(){
             (async () => {
                 //console.log(apiurl + movieID + apiKey);
                 try {
-                    const response = await fetch(apiurl + movieID + apiKey);
+                    const response = await fetch(nodeServer + "/movies?plot=full&i=" + movieID);
                     if (response) {
                         const jsonResponse = await response.json();
                         //console.log(JSON.stringify(jsonResponse));
@@ -27,6 +27,19 @@ function showMovie(){
                             noResult(movieID);
                         }
                     }
+
+                    <!-- VANHA TAPA -->
+                    /*const response = await fetch(apiurl + movieID + apiKey);
+                    if (response) {
+                        const jsonResponse = await response.json();
+                        //console.log(JSON.stringify(jsonResponse));
+                        if (jsonResponse.hasOwnProperty('imdbID')) {
+                            localStorage.setItem("movieData", JSON.stringify(jsonResponse));
+                            showResult(jsonResponse);
+                        } else {
+                            noResult(movieID);
+                        }
+                    }*/
                 } catch (error) {
                     console.log(error);
                 }
@@ -42,16 +55,40 @@ function showMovie(){
 function showResult(data){
     //console.log(data);
     const h = document.getElementById("title");
+    const year = document.getElementById('year');
+    const ratingIMDB = document.getElementById('ratingIMDB');
+    const ratingLEFFA = document.getElementById('ratingLeffa');
+    const length = document.getElementById('length');
+    const genre = document.getElementById('genre');
     const img = document.getElementById("poster");
+
+    const plot = document.getElementById('plot');
+    const director = document.getElementById('director');
+    const writers = document.getElementById('writers');
+    const actors = document.getElementById('actors');
+    const metascore = document.getElementById('metascore');
+
     h.innerHTML = data.Title;
+    year.innerHTML = data.Year;
+    ratingIMDB.innerHTML = data.imdbRating;
+    length.innerHTML = data.Runtime;
+    genre.innerHTML = data.Genre;
+    director.innerHTML = data.Director;
+    writers.innerHTML = data.Writer;
+    actors.innerHTML = data.Actors;
+    metascore.innerHTML = data.Metascore;
+
     img.src = data.Poster;
     img.alt = "Poster of " + data.Title;
+    plot.innerHTML = data.Plot;
     showComments(data.imdbID);
 }
 
 //showcomments?id=elokuvanid
 function showComments(id){
 
+    const comments = document.getElementById('comments');
+    comments.innerHTML = "";
     try {
         (async () => {
             console.log("Searching for comments: "+nodeServer+"/showcomments?id="+id);
@@ -68,6 +105,25 @@ function showComments(id){
                             let comment = jsonResponse[i].comment;
                             let date = jsonResponse[i].date;
                             console.log(reviewID+", "+commentID,+", "+header+", "+comment+", "+date);
+
+                            let cDiv = document.createElement('div');
+
+                            let cHeader = document.createElement('h3');
+                            cHeader.innerHTML = header;
+                            cDiv.appendChild(cHeader);
+
+                            let cDate = document.createElement('h5');
+                            cDate.innerHTML = date;
+                            cDiv.appendChild(cDate);
+
+                            let cAuthor = document.createElement('h4');
+                            cAuthor.innerHTML = reviewID;
+                            cDiv.appendChild(cAuthor);
+
+                            let cText = document.createElement('p');
+                            cText.innerHTML = comment;
+                            cDiv.appendChild(cText);
+                            comments.appendChild(cDiv);
                         }
                     }
                 }

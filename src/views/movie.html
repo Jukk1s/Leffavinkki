@@ -6,8 +6,33 @@
 </head>
 <body onload="showMovie()">
 <div>
-    <h1 id="title"></h1>
-    <img id="poster">
+    <div>
+        <div>
+            <h1 id="title"></h1>
+            <h2 id="year"></h2>
+            <h3 id="ratingIMDB"></h3>
+            <h3 id="ratingLeffa"></h3>
+            <p id="length"></p>
+            <p id="genre"></p>
+        </div>
+        <div>
+            <img id="poster">
+        </div>
+    </div>
+
+    <div>
+        <p id="plot"></p>
+        <h3>Ohjaaja: <p id="director"></p></h3>
+        <h3>Kirjoittajat: <p id="writers"></p></h3>
+        <h3>Tähdet: <p id="actors"></p></h3>
+        <h4>Metascore: <h4 id="metascore"></h4></h4>
+    </div>
+    <div>
+        <h2>Kommentit</h2>
+        <div id="comments"></div>
+    </div>
+
+
 </div>
 <script src="/js/movie.js"></script>
 </body>

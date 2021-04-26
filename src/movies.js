@@ -1,13 +1,67 @@
-module.exports = function(app, cors, url, query) {
-    app.post('/showmovie',cors(), function(req,res){
+const apiUrl = "http://www.omdbapi.com/?r=json&";
 
-        console.log('Elokuvan tiedot '+req.body);
+//Käytetään arraytä, sillä rajapinta rajoittaa 1000-hakemusta
+//per päivä/avain niin on helppo implementoida jos avain vaihtuisi
+//päivän aikana
+const apiKeys = ["&apikey=bfbd237f"];
 
-        //VANHOJA IDEOITA: EI TARVITSE HUOMIOIDA
-        // parametrien kirjoitustapa selaimessa : http://localhost:8081/showmovie?n=elokuvannimi&y=elokuvanvuosi
-        //var q = url.parse(req.url, true).query;//movie_name movie_year
-        //var name = q.n;
-        //var year = q.y;
+module.exports = function(app, cors, url, query, fetch) {
+
+    app.get('/movies', cors(), function(req,res){
+
+        var q = url.parse(req.url, true).query;
+        let parameters = "";
+        let paramCount = 0;
+        let separators = 0;
+
+        //Katsotaan lähetetyt parametrit ja lisätään ne muuttujaan
+        if('s' in q){
+            //Jos on jo parametri eikä välissä ole & merkkiä
+            if(paramCount>separators){
+                separators++;parameters+="&";}
+
+            parameters += "s="+q.s;
+            paramCount++;
+        }
+        if('y' in q){
+            //Jos on jo parametri eikä välissä ole & merkkiä
+            if(paramCount>separators){
+                separators++;parameters+="&";}
+
+            parameters += "y="+q.y;
+            paramCount++;
+        }
+        if('i' in q){
+            //Jos on jo parametri eikä välissä ole & merkkiä
+            if(paramCount>separators){
+                separators++;parameters+="&";}
+
+            parameters += "i="+q.i;
+            paramCount++;
+        }
+        if('plot' in q){
+            //Jos on jo parametri eikä välissä ole & merkkiä
+            if(paramCount>separators){
+                separators++;parameters+="&";}
+
+            parameters += "plot="+q.plot;
+            paramCount++;
+        }
+
+        if(paramCount>0){
+            (async () => {
+                console.log("Search request: " + apiUrl+parameters+apiKeys[0]);
+                try{
+                    const response = await fetch(apiUrl+parameters+apiKeys[0]);
+                    if(response){
+                        const jsonResponse = await response.json();
+                        res.json(jsonResponse);
+                    }
+                }catch(error){
+                    console.log(error);
+                }
+            })();
+        }
 
     });
 
@@ -46,7 +100,6 @@ module.exports = function(app, cors, url, query) {
                         //console.log(string);
                     }
                 }
-                console.log(returnArray);
                 res.json(returnArray);
 
             }
