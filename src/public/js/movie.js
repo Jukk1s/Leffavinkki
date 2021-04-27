@@ -55,7 +55,6 @@ function showMovie(){
 function showResult(data){
     //console.log(data);
     const h = document.getElementById("title");
-    const year = document.getElementById('year');
     const ratingIMDB = document.getElementById('ratingIMDB');
     const ratingLEFFA = document.getElementById('ratingLeffa');
     const length = document.getElementById('length');
@@ -68,9 +67,8 @@ function showResult(data){
     const actors = document.getElementById('actors');
     const metascore = document.getElementById('metascore');
 
-    h.innerHTML = data.Title;
-    year.innerHTML = data.Year;
-    ratingIMDB.innerHTML = data.imdbRating;
+    h.innerHTML = data.Title+" ("+data.Year+")";
+    ratingIMDB.innerHTML = data.imdbRating+"/10";
     length.innerHTML = data.Runtime;
     genre.innerHTML = data.Genre;
     director.innerHTML = data.Director;
@@ -107,22 +105,29 @@ function showComments(id){
                             console.log(reviewID+", "+commentID,+", "+header+", "+comment+", "+date);
 
                             let cDiv = document.createElement('div');
+                            cDiv.className = "comment";
+
+                            let pDiv = document.createElement('div');
+                            pDiv.className = "commentProfilepic";
+                            let contentDiv = document.createElement('div');
+                            contentDiv.className = "commentContent"
 
                             let cHeader = document.createElement('h3');
                             cHeader.innerHTML = header;
-                            cDiv.appendChild(cHeader);
+                            contentDiv.appendChild(cHeader);
 
                             let cDate = document.createElement('h5');
                             cDate.innerHTML = date;
-                            cDiv.appendChild(cDate);
+                            contentDiv.appendChild(cDate);
 
                             let cAuthor = document.createElement('h4');
                             cAuthor.innerHTML = reviewID;
-                            cDiv.appendChild(cAuthor);
+                            contentDiv.appendChild(cAuthor);
 
                             let cText = document.createElement('p');
                             cText.innerHTML = comment;
-                            cDiv.appendChild(cText);
+                            contentDiv.appendChild(cText);
+                            cDiv.appendChild(pDiv);cDiv.appendChild(contentDiv);
                             comments.appendChild(cDiv);
                         }
                     }

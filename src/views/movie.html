@@ -3,33 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <link href="/css/movie.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body onload="showMovie()">
 <div>
-    <div>
-        <div>
-            <h1 id="title"></h1>
-            <h2 id="year"></h2>
-            <h3 id="ratingIMDB"></h3>
-            <h3 id="ratingLeffa"></h3>
-            <p id="length"></p>
-            <p id="genre"></p>
+    <div id="movieColumn">
+        <div id="intro">
+            <div>
+                <div>
+                    <h1 id="title"></h1>
+                    <h3 style="text-align: center; color: silver;">LeffaVinkki: (ei vielä tehty)</h3>
+                    <div id="starReview">
+                        <span id="star1" class="fa fa-star checked"></span>
+                        <span id="star2" class="fa fa-star checked"></span>
+                        <span id="star3" class="fa fa-star checked"></span>
+                        <span id="star4" class="fa fa-star"></span>
+                        <span id="star5" class="fa fa-star"></span>
+                    </div>
+                    <p id="length"></p>
+                    <p id="genre"></p>
+                </div>
+            </div>
+            <div>
+                <img id="poster">
+            </div>
         </div>
-        <div>
-            <img id="poster">
-        </div>
-    </div>
 
-    <div>
-        <p id="plot"></p>
-        <h3>Ohjaaja: <p id="director"></p></h3>
-        <h3>Kirjoittajat: <p id="writers"></p></h3>
-        <h3>Tähdet: <p id="actors"></p></h3>
-        <h4>Metascore: <h4 id="metascore"></h4></h4>
-    </div>
-    <div>
-        <h2>Kommentit</h2>
-        <div id="comments"></div>
+        <div id="info">
+            <p id="plot"></p>
+            <div width="100%"><h4 class="headingwithp">Tähdet: </h4><p id="actors" class="headingwithp"></p></div>
+            <h3 id="ratingIMDB"></h3>
+
+            <h3 class="headingwithp">Ohjaaja: </h3><p id="director" class="headingwithp"></p>
+            <br>
+            <h3 class="headingwithp">Kirjoittajat: </h3><p id="writers" class="headingwithp"></p>
+            <br>
+
+            <h4 class="headingwithp">Metascore: </h4><h4 id="metascore" class="headingwithp"></h4>
+        </div>
+        <div id="commentsection">
+            <h2>Kommentit</h2>
+            <div id="comments"></div>
+        </div>
     </div>
 
 

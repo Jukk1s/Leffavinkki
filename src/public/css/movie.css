@@ -1,0 +1,69 @@
+* {
+    font-family: Arial;
+}
+
+#movieColumn {
+    margin: auto;
+    width: 50%;
+    background-color: white;
+}
+
+#intro {
+    background-color: #333333;
+}
+
+#info {
+    padding: 20px;
+}
+
+#title, #length, #genre {
+    text-align: center;
+    color: silver;
+}
+
+.headingwithp {
+    display:inline; vertical-align:middle;
+}
+
+#poster {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#plot {
+    margin-left: auto; margin-right: auto;
+    width: 70%;
+    text-align: center;
+}
+
+.checked {
+    color: orange;
+}
+
+#starReview {
+    align-content: center;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#commentsection {
+    padding: 10px 10% 10px 10%;
+}
+
+.comment {
+    border: solid black 2px;
+    margin: 1%;
+    padding: 5px;
+}
+
+.commentProfilepic {
+    width: 19%;
+    display:inline;
+}
+
+.commentContent {
+    width: 80%;
+    display:inline;
+}
