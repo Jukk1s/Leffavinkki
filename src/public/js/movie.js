@@ -1,6 +1,48 @@
 const nodeServer = "http://localhost:8081";
 const apiurl = "http://www.omdbapi.com/?r=json&i=";
 let apiKey = "&apikey=bfbd237f";
+
+const newReviewStarts = [
+    document.getElementById("starR1"),
+    document.getElementById("starR2"),
+    document.getElementById("starR3"),
+    document.getElementById("starR4"),
+    document.getElementById("starR5")
+];
+let selectedStar = newReviewStarts[0];
+highlightSelectedStar();
+
+for(let i = 0; i < newReviewStarts.length; i++){
+    newReviewStarts[i].addEventListener("click", function(event){
+        selectedStar = newReviewStarts[i];
+    });
+    newReviewStarts[i].addEventListener("mouseenter", function(event){
+        starRemoveHighlight();
+        for(let l = 0; l <= i; l++){
+            newReviewStarts[l].classList.add('checked');
+        }
+    });
+    newReviewStarts[i].addEventListener("mouseleave", function(event){
+        for(let l = 0; l <= i; l++){
+            newReviewStarts[l].classList.remove('checked');
+        }
+        highlightSelectedStar();
+    });
+}
+
+function starRemoveHighlight(){
+    for(let i = 0; i < newReviewStarts.length; i++){
+        newReviewStarts[i].classList.remove('checked');
+    }
+}
+
+function highlightSelectedStar() {
+    starRemoveHighlight();
+    console.log(newReviewStarts.indexOf(selectedStar));
+    for(let i = 0; i <= newReviewStarts.indexOf(selectedStar); i++){
+        newReviewStarts[i].classList.add('checked');
+    }
+}
 /*
 let data = localStorage.getItem("movieData");
 let jsonData = JSON.parse(data);

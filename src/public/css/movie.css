@@ -67,3 +67,11 @@
     width: 80%;
     display:inline;
 }
+
+#newHeading, #newComment {
+    width: 70%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+input#newHeading[type='text'] { font-size: 24px; border: none; padding: 5px}
+input#newComment[type='text'] { font-size: 14px; border: none; padding: 5px}
