@@ -1,7 +1,50 @@
 #top {
-    height: 500px;
+    padding: 200px 0 25px 0;
+    background-color: #333333;
+    position: relative;
 }
 
-img {
-    width: 500px;
+#name, #title, #genres, #reviewsCount{
+    color: silver;
+}
+
+#name, #title, #genres, .reviewsCount, #mostViewed, #status, #commentCount {
+    text-align: center;
+}
+
+#reviews {
+    width: 90%;
+    margin-left: auto; margin-right: auto;
+    background-color: silver;
+    padding: 10px;
+}
+
+#profilePicture {
+    width: 300px;
+    position: absolute;
+    bottom:-10%;
+    right: 65%;
+}
+
+.middle {
+    float: left;
+    width: 59%;
+}
+
+.sideL, .sideR {
+    width: 19%;
+}
+
+.sideL {
+    float:left;
+}
+
+.sideR {
+    float:right;
+}
+
+#info {
+    background-color: silver;
+    padding: 10px;
+    margin: 20px 10px 20px 10px;
 }

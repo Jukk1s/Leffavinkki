@@ -22,6 +22,28 @@ module.exports = function(app, cors, url, query) {
         })()
     });
 
+    app.get('/user',cors(),(req,res) => {
+        var q = url.parse(req.url, true).query;
+        const userID = q.id;
+        var sql = "SELECT * FROM users WHERE id = ?";
+        var string;
+        (async () => {
+            try {
+                const rows = await query(sql, [userID]);
+
+                console.log(rows[0]);
+                string = JSON.stringify(rows[0]);
+                res.send(string);
+            }
+            catch (err){
+                console.log("Database error!"+err);
+            }
+            finally {
+
+            }
+        })();
+    })
+
 //http://localhost:8081/users/new?name=nimi&password=salasana&email=sähköposti
 //http://localhost:8081/users/new?name=&password=&email=
     app.post('/users/new', cors(), (req,res) => {

@@ -111,4 +111,51 @@ module.exports = function(app, cors, url, query, fetch) {
             }
         })();
     })
+
+    app.get('/usercomments', cors(), (req,res)=>{
+        var q = url.parse(req.url, true).query;
+        const profileId = q.id;
+        console.log('Searching for profile with id: '+profileId);
+        var sql = "SELECT * FROM reviews WHERE users_id = ?";
+        var string;
+        (async () => {
+            try {
+                const rows = await query(sql, [profileId]);
+
+                string = JSON.stringify(rows);
+
+                sql = "SELECT * FROM comments WHERE reviews_id = ?";
+
+                var returnArray = [];
+
+                //console.log(string);
+                for(var i = 0; i < rows.length; i++){
+                    if(rows[i].hasOwnProperty('id')) {
+                        const rows2 = await query(sql, rows[i].id);
+                        for(var l = 0; l < rows2.length; l++){
+                            returnArray.push(rows2[l]);
+                        }
+
+                        /*
+                        if(JSON.stringify(returnArray) === "{}")
+                            returnArray = rows2;
+                        else
+                            returnArray.push(rows2);
+
+                         */
+                        string = JSON.stringify(rows2);
+                        //console.log(string);
+                    }
+                }
+                res.json(returnArray);
+
+            }
+            catch (err){
+                console.log("Database error!"+err);
+            }
+            finally {
+
+            }
+        })();
+    })
 }
