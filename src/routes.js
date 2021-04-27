@@ -58,4 +58,15 @@ module.exports = function(app, cors) {
     app.get('/login',cors(), function (req, res) {
         res.sendFile( __dirname + "/views/" + "login.html" );
     });
+
+
+    app.get('/profile.html',cors(), function (req, res) {
+        res.writeHead(301,
+            {Location: '/profile'}
+        );
+        res.end();
+    });
+    app.get('/profile',cors(), function (req, res) {
+        res.sendFile( __dirname + "/views/" + "profile.html" );
+    });
 }
