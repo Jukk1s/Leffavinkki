@@ -12,6 +12,8 @@ module.exports = function(app, cors, url, query, fetch) {
 
     app.post('/movies/addcomment', verify, (req, res) => {
         console.log(readToken.readId(req.header('auth-token')));
+        console.log(req.body.newHeading);
+        console.log(req.body.newComment);
         res.send('Hello there');
     })
 
@@ -73,7 +75,7 @@ module.exports = function(app, cors, url, query, fetch) {
 
     });
 
-//showcomments?id=elokuvanid
+    //showcomments?id=elokuvanid
     app.get('/showcomments', cors(), (req,res)=>{
         var q = url.parse(req.url, true).query;
         const movieId = q.id;
