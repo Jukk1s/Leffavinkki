@@ -8,12 +8,14 @@ const readToken = require('./readToken');
 //päivän aikana
 const apiKeys = ["&apikey=bfbd237f"];
 
-module.exports = function(app, cors, url, query, fetch) {
+module.exports = function(app, cors, url, query, fetch, bodyParser) {
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json('application/json'));
+    app.use(cors({credentials: true, origin: true}));
 
     app.post('/movies/addcomment', verify, (req, res) => {
         console.log(readToken.readId(req.header('auth-token')));
-        console.log(req.body.newHeading);
-        console.log(req.body.newComment);
+        console.log(req.body.movieId);
         res.send('Hello there');
     })
 

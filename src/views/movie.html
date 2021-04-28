@@ -54,11 +54,11 @@
             </div>
             <h3>Kirjoita kommentti</h3>
             <div class="comment">
-                <form>
+                <form id="commentForm" action="/movies/addcomment" method="post">
                     <input type="text" placeholder="Otsikko" id="newHeading">
                     <input type="text" placeholder="Kommentti" id="newComment">
                     <br>
-                    <input type="button" value="Lähetä">
+                    <button type="submit" value="Lähetä"/>
                 </form>
             </div>
 
@@ -69,6 +69,7 @@
 
 
 </div>
+<script src="/js/jquery-3.6.0.min.js"></script>
 <script src="/js/movie.js"></script>
 </body>
 </html>

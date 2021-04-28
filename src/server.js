@@ -61,7 +61,7 @@ const query = util.promisify(conn.query).bind(conn);
 
 require('./routes')(app, cors);
 require('./users')(app, cors, url, query, dotenv,jwt);
-require('./movies')(app,cors, url, query, fetch);
+require('./movies')(app,cors, url, query, fetch, bodyParser);
 
 /*app.post('/process_post', urlencodedParser,
     [check('first_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),

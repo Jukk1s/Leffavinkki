@@ -1,6 +1,7 @@
 const nodeServer = "http://localhost:8081";
 const apiurl = "http://www.omdbapi.com/?r=json&i=";
 let apiKey = "&apikey=bfbd237f";
+let movieId;
 
 const newReviewStarts = [
     document.getElementById("starR1"),
@@ -29,6 +30,27 @@ for(let i = 0; i < newReviewStarts.length; i++){
         highlightSelectedStar();
     });
 }
+
+$('#commentForm').submit(function(e){
+    e.preventDefault();
+
+    var formData =  '{"movieId":"' + movieId + '", "header":"' + document.getElementById('newHeading').value + '" , "content":"' + document.getElementById('newComment').value + '" }';
+    var jsonFormData = JSON.parse(formData);
+
+    console.log(jsonFormData);
+    const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjEsImlhdCI6MTYxOTYyNDE4Nn0.DbKQGpUg0GnsYDutPTGtQc2EvOhHPx1srN7KtVc4n6s";
+    $.ajax({
+        beforeSend: function(request) {
+            request.setRequestHeader("auth-token", authorizationToken);
+        },
+        url: nodeServer + "/movies/addcomment",
+        type: 'post',
+        data: jsonFormData,
+        success:function(){
+            // Whatever you want to do after the form is successfully submitted
+        }
+    });
+});
 
 function starRemoveHighlight(){
     for(let i = 0; i < newReviewStarts.length; i++){
@@ -83,6 +105,7 @@ function showMovie(){
 
 function showResult(data){
     //console.log(data);
+    movieId = data.imdbID;
     const h = document.getElementById("title");
     const ratingIMDB = document.getElementById('ratingIMDB');
     const ratingLEFFA = document.getElementById('ratingLeffa');
