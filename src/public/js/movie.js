@@ -69,19 +69,6 @@ function showMovie(){
                             noResult(movieID);
                         }
                     }
-
-                    <!-- VANHA TAPA -->
-                    /*const response = await fetch(apiurl + movieID + apiKey);
-                    if (response) {
-                        const jsonResponse = await response.json();
-                        //console.log(JSON.stringify(jsonResponse));
-                        if (jsonResponse.hasOwnProperty('imdbID')) {
-                            localStorage.setItem("movieData", JSON.stringify(jsonResponse));
-                            showResult(jsonResponse);
-                        } else {
-                            noResult(movieID);
-                        }
-                    }*/
                 } catch (error) {
                     console.log(error);
                 }

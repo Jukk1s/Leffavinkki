@@ -1,4 +1,14 @@
 const nodeServer = "http://localhost:8081";
+const name = document.getElementById("name");
+const title = document.getElementById('title');
+const genres = document.getElementById('genres');
+const profilePic = document.getElementById('profilePicture');
+const reviewsCount = document.getElementById('reviewsCount');
+const reviewCounts = document.getElementsByClassName('reviewsCount');
+const commentCount = document.getElementById('commentCount');
+const reviews = document.getElementById("reviews");
+const status = document.getElementById('status');
+const mostViewed = document.getElementById('mostViewed');
 
 function showProfile(){
     const queryString = window.location.search;
@@ -33,15 +43,9 @@ function showProfile(){
 
 function showResult(data){
     //console.log(data);
-    const name = document.getElementById("name"); name.innerHTML = data.name;
-    const title = document.getElementById('title'); title.innerHTML = data.status;
-    const genres = document.getElementById('genres');
-    const profilePic = document.getElementById('profilePicture');
-    const reviewCounts = document.getElementsByClassName('reviewsCount');
-    const reviews = document.getElementById("reviews");
 
-    const status = document.getElementById('status');
-    const mostViewed = document.getElementById('mostViewed');
+    title.innerHTML = data.status;
+    name.innerHTML = data.name;
     showComments(data.id);
 }
 
@@ -57,6 +61,8 @@ function showComments(id){
                 if (response) {
                     const jsonResponse = await response.json();
                     console.log(jsonResponse);
+                    commentCount.innerHTML = jsonResponse.length;
+                    reviewsCount.innerHTML = "Kommentit ("+jsonResponse.length+")";
                     for(var i = 0; i < jsonResponse.length; i++){
                         if(jsonResponse[i].hasOwnProperty('id')) {
                             let reviewID = jsonResponse[i].reviews_id;
@@ -101,7 +107,6 @@ function showComments(id){
     } catch (err) {
         console.log(err);
     }
-    console.log();
 }
 
 function noResult(id){
