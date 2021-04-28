@@ -1,4 +1,5 @@
 .movieDiv {
+    width: 200px;
     padding: 10px;
     transition: transform .2s; /* Animation */
     display: inline-block;
@@ -42,6 +43,19 @@
     transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
+.movieDiv,a{
+    color: black;
+}
+.movieDiv:hover .poster{
+    box-shadow: 5px 10px #888888;
+}
+
+.movieDiv h3{
+    text-align: center;
+    overflow-x:hidden;
+    white-space: normal;
+}
+
 body {
     font-family: Arial, Verdana, sans-serif;
     background-color: darkgrey;
@@ -49,8 +63,9 @@ body {
     margin: 0;
 }
 
-img {
-    width: 70%;
+.poster {
+    transition: box-shadow .3s;
+    width: 200px;
     height: auto;
 }
 

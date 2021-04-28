@@ -104,11 +104,24 @@ function showResults(jsonResponse) {
         let img = document.createElement("img");
         img.src = jsonResponse.Search[i].Poster;
         img.alt = "Poster of " + jsonResponse.Search[i].Title;
+
+        //Jos kuva ei lataa
+        img.onerror = function() {
+            this.src = '/img/poster_holder.jpg';
+        }
+        img.classList.add('poster');
         movieDiv.appendChild(img);
 
         movieLink.appendChild(movieDiv);
         div.appendChild(movieLink);
     }
+}
+
+function onImgError(source){
+    console.log('IMAGE ERROR!!!!');
+    source.src="/img/poster_holder.jpg";
+    source.onerror = "";
+    return true;
 }
 
 function openMovie(data){
