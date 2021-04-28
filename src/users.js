@@ -1,6 +1,7 @@
 //Kirjautuminen - rekisteröityminen
 
-module.exports = function(app, cors, url, query) {
+module.exports = function(app, cors, url, query, dotenv,jwt) {
+    dotenv.config();
 
     app.get('/users', cors(), (req, res) => {
         var sql = "SELECT * FROM users";
@@ -44,9 +45,9 @@ module.exports = function(app, cors, url, query) {
         })();
     })
 
-//http://localhost:8081/users/new?name=nimi&password=salasana&email=sähköposti
-//http://localhost:8081/users/new?name=&password=&email=
-    app.post('/users/new', cors(), (req,res) => {
+//http://localhost:8081/users/register?name=nimi&password=salasana&email=sähköposti
+//http://localhost:8081/users/register?name=&password=&email=
+    app.post('/users/register', (req,res) => {
         var q = url.parse(req.url, true).query;
         const user = { name: q.name, email: q.email, password: q.password };
         const name = user.name;
@@ -88,7 +89,37 @@ module.exports = function(app, cors, url, query) {
         })();
     });
 
-    app.post('/users/login',cors(), async (req, res) => {
-        const user = "";
+    //http://localhost:8081/users/login?email=&password=
+    app.get('/users/login',cors(), (req, res) => {
+        var q = url.parse(req.url, true).query;
+        const user = { email: q.email, password: q.password };
+        const email = user.email;
+        const password = user.password;
+        var sql = "SELECT * FROM users WHERE email = ? AND password = SHA1(?)";
+        var string;
+        (async () => {
+            try {
+                const rows = await query(sql, [email, password]);
+
+                string = JSON.stringify(rows);
+                if(rows.length > 0){
+                    console.log("User logged in with id "+rows[0].id);
+                    //Tehdään token
+                    const token = jwt.sign({id: rows[0].id}, process.env.TOKEN_SECRET);
+                    res.header('auth-token', token).send(token);
+                } else {
+                    res.send("Email and password don't match");
+                    string = JSON.stringify(rows);
+                    console.log(string);
+                    res.send("Email and password don't match");
+                }
+            }
+            catch (err){
+                console.log("Database error!"+err);
+            }
+            finally {
+
+            }
+        })();
     })
 }

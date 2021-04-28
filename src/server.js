@@ -16,7 +16,15 @@ var http = require('http');
 
 var util = require('util');
 
+const dotenv = require('dotenv');
+
 const fetch = require("node-fetch");
+
+const jwt = require('jsonwebtoken');
+
+dotenv.config();
+
+console.log(process.env.MYSQL_USERNAME);
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -30,10 +38,10 @@ var conn = mysql;
 //Koitetaan ottaa yhteyttä muuttujan "isLocalhost" mukaan
 if(isLocalhost){
     conn = mysql.createConnection({
-        host: "localhost",
-        user: "client",
-        password: "client",
-        database: "web_projekti"
+        host: process.env.MYSQL_URL,
+        user: process.env.MYSQL_USERNAME,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE
     });
 } else {
     conn = mysql.createConnection({
@@ -52,7 +60,7 @@ conn.connect(function(err){
 const query = util.promisify(conn.query).bind(conn);
 
 require('./routes')(app, cors);
-require('./users')(app, cors, url, query);
+require('./users')(app, cors, url, query, dotenv,jwt);
 require('./movies')(app,cors, url, query, fetch);
 
 /*app.post('/process_post', urlencodedParser,
@@ -93,5 +101,6 @@ var server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
 
-    console.log("Example app listening at http://%s:%s", host, port)
+    //console.log("Serveri portissa http://%s:%s", host, port)
+    console.log("Serveri pyörii polussa http://localhost:%s", port)
 });

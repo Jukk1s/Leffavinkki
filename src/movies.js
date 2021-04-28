@@ -1,11 +1,19 @@
 const apiUrl = "http://www.omdbapi.com/?r=json&";
 
+const verify = require('./verifyToken');
+const readToken = require('./readToken');
+
 //Käytetään arraytä, sillä rajapinta rajoittaa 1000-hakemusta
 //per päivä/avain niin on helppo implementoida jos avain vaihtuisi
 //päivän aikana
 const apiKeys = ["&apikey=bfbd237f"];
 
 module.exports = function(app, cors, url, query, fetch) {
+
+    app.post('/movies/addcomment', verify, (req, res) => {
+        console.log(readToken.readId(req.header('auth-token')));
+        res.send('Hello there');
+    })
 
     app.get('/movies', cors(), function(req,res){
 
