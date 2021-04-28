@@ -6,6 +6,7 @@ const profilePic = document.getElementById('profilePicture');
 const reviewsCount = document.getElementById('reviewsCount');
 const reviewCounts = document.getElementsByClassName('reviewsCount');
 const commentCount = document.getElementById('commentCount');
+const description = document.getElementById('description');
 const reviews = document.getElementById("reviews");
 const status = document.getElementById('status');
 const mostViewed = document.getElementById('mostViewed');
@@ -22,7 +23,7 @@ function showProfile(){
                     if (response) {
                         const jsonResponse = await response.json();
                         //console.log(JSON.stringify(jsonResponse));
-                        if (jsonResponse.hasOwnProperty('id')) {
+                        if (jsonResponse[0].hasOwnProperty('id')) {
                             localStorage.setItem("profileData", JSON.stringify(jsonResponse));
                             showResult(jsonResponse);
                         } else {
@@ -42,10 +43,13 @@ function showProfile(){
 }
 
 function showResult(data){
-    //console.log(data);
+    console.log(data);
 
-    title.innerHTML = data.status;
-    name.innerHTML = data.name;
+    //data[0] sisältää users taulun käyttäjän tiedot
+    //data[1] sisältää profiles taulun käyttäjän tiedot
+    title.innerHTML = data[0].status;
+    name.innerHTML = data[0].name;
+    description.innerHTML = data[1].description;
     showComments(data.id);
 }
 
