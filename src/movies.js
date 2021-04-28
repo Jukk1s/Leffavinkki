@@ -1,4 +1,4 @@
-const apiUrl = "http://www.omdbapi.com/?r=json&";
+const apiUrl = "http://www.omdbapi.com/?r=json&type=movie&";
 
 const verify = require('./verifyToken');
 const readToken = require('./readToken');
@@ -22,6 +22,7 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
     app.get('/movies', cors(), function(req,res){
 
         var q = url.parse(req.url, true).query;
+        let pagecount = 1;
         let parameters = "";
         let paramCount = 0;
         let separators = 0;
@@ -59,8 +60,38 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
             parameters += "plot="+q.plot;
             paramCount++;
         }
+        if('page' in q){
+            if(q.page > 1){
+                pagecount = q.page;
+                if(pagecount>3)
+                    pagecount=3;
+            }
+        }
+        if(paramCount>0 && pagecount > 1){
+            const page = "&page=";
+            (async () => {
+                console.log("Search request: " + apiUrl+parameters+apiKeys[0]+" pages "+pagecount);
+                try{
+                    //Etistään ensiksi yhden sivun verran elokuva "10" (page=1)
+                    let movies = await fetch(apiUrl+parameters+page+"1"+apiKeys[0]);
+                    let jsonResponse = await movies.json();
 
-        if(paramCount>0){
+                    //Tämän jälkeen lisätään vielä niin monta sivua elokuva kuin kysytään (max 3)
+                    for(let i = 2; i <= pagecount; i++){
+                        let response = await fetch(apiUrl+parameters+page+i+apiKeys[0]);
+                        let reponseJSON = await response.json();
+                        for (let i = 0; i < Object.keys(reponseJSON.Search).length; i++){
+                            jsonResponse.Search.push(reponseJSON.Search[i]);
+                        }
+                    }
+                    if(movies){
+                        res.json(jsonResponse);
+                    }
+                }catch(error){
+                    console.log(error);
+                }
+            })();
+        } else if(paramCount>0){
             (async () => {
                 console.log("Search request: " + apiUrl+parameters+apiKeys[0]);
                 try{

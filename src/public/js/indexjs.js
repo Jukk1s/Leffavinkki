@@ -13,7 +13,7 @@ function getMovies() {
         movieYear = "&y=" + year;
     }
 
-    let url = nodeServer + "/movies?s=";
+    let url = nodeServer + "/movies?page=3&s=";
 
     (async () => {
         console.log(url + name + movieYear + ", " + Number.isInteger(year) + year);
