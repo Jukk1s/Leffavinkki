@@ -166,16 +166,13 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
                 for(var i = 0; i < commentRows.length; i++){
 
                     if(commentRows[i].hasOwnProperty('movie_id')) {
-                        for (let j = 0; j < commentRows.length; j++) {
+                        let userId = commentRows[i].users_id;
+                        sql = "SELECT name FROM users WHERE id = ?";
+                        const nameRow = await query(sql, [userId]);
+                        let name = nameRow[0].name;
+                        commentRows[i].name = name; //Tällä lisätään uusi sarake JSONiin
 
-                            let userId = commentRows[i].users_id;
-                            sql = "SELECT name FROM users WHERE id = ?";
-                            const nameRow = await query(sql, [userId]);
-                            let name = nameRow[0].name;
-                            commentRows[j].name = name; //Tällä lisätään uusi sarake JSONiin
-
-                            returnArray.push(commentRows[j]);
-                        }
+                        returnArray.push(commentRows[i]);
 
                         /*
 
