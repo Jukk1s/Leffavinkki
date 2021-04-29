@@ -9,17 +9,50 @@ const readToken = require('./readToken');
 const apiKeys = ["&apikey=bfbd237f"];
 
 module.exports = function(app, cors, url, query, fetch, bodyParser) {
-    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json('application/json'));
     app.use(cors({credentials: true, origin: true}));
 
+
     app.post('/movies/addcomment', verify, (req, res) => {
         console.log(readToken.readId(req.header('auth-token')));
-        console.log(req.body.movieId);
-        res.send('Hello there');
+        console.log(req);
+
+        let commentHeader = req.body.header;
+        let comment = req.body.content;
+        let movieId = req.body.movieId;
+        let userId = req.user.id;
+        let rating = 3; // Muokataan myöhemmin tämä kuntoon
+
+
+        try {
+            (async () => {
+                let sql = "SELECT * FROM reviews WHERE users_id = ? AND movie_id = ?";
+                const rows = await query(sql, [userId, movieId]);
+
+                if (rows.length > 0) {
+                    let sql2 = "UPDATE reviews SET review = ? WHERE users_id = ? AND movie_id = ?";
+                    await query(sql2, [rating, userId, movieId]);
+                } else {
+                    let sql3 = "INSERT INTO reviews (users_id, movie_id, review) VALUES (?, ?, ?)";
+                    await query(sql3, [userId, movieId, rating]);
+                }
+
+                let sql4 = "INSERT INTO comments (users_id, movie_id, header, comment) VALUES (?, ?, ?, ?)";
+                const rows4 = await query(sql4, [userId, movieId, commentHeader, comment]);
+                let string = JSON.stringify(rows4);
+
+                res.send(string);
+
+            })()
+
+        } catch (err) {
+            console.log("Database error! " + err);
+        }
+
     })
 
-    app.get('/movies', cors(), function(req,res){
+    app.get('/movies', cors(), function (req, res) {
 
         var q = url.parse(req.url, true).query;
         let pagecount = 1;
@@ -28,79 +61,87 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         let separators = 0;
 
         //Katsotaan lähetetyt parametrit ja lisätään ne muuttujaan
-        if('s' in q){
+        if ('s' in q) {
             //Jos on jo parametri eikä välissä ole & merkkiä
-            if(paramCount>separators){
-                separators++;parameters+="&";}
+            if (paramCount > separators) {
+                separators++;
+                parameters += "&";
+            }
 
-            parameters += "s="+q.s;
+            parameters += "s=" + q.s;
             paramCount++;
         }
-        if('y' in q){
+        if ('y' in q) {
             //Jos on jo parametri eikä välissä ole & merkkiä
-            if(paramCount>separators){
-                separators++;parameters+="&";}
+            if (paramCount > separators) {
+                separators++;
+                parameters += "&";
+            }
 
-            parameters += "y="+q.y;
+            parameters += "y=" + q.y;
             paramCount++;
         }
-        if('i' in q){
+        if ('i' in q) {
             //Jos on jo parametri eikä välissä ole & merkkiä
-            if(paramCount>separators){
-                separators++;parameters+="&";}
+            if (paramCount > separators) {
+                separators++;
+                parameters += "&";
+            }
 
-            parameters += "i="+q.i;
+            parameters += "i=" + q.i;
             paramCount++;
         }
-        if('plot' in q){
+        if ('plot' in q) {
             //Jos on jo parametri eikä välissä ole & merkkiä
-            if(paramCount>separators){
-                separators++;parameters+="&";}
+            if (paramCount > separators) {
+                separators++;
+                parameters += "&";
+            }
 
-            parameters += "plot="+q.plot;
+            parameters += "plot=" + q.plot;
             paramCount++;
         }
-        if('page' in q){
-            if(q.page > 1){
+        if ('page' in q) {
+            if (q.page > 1) {
                 pagecount = q.page;
-                if(pagecount>3)
-                    pagecount=3;
+                if (pagecount > 3)
+                    pagecount = 3;
             }
         }
-        if(paramCount>0 && pagecount > 1){
+        if (paramCount > 0 && pagecount > 1) {
             const page = "&page=";
             (async () => {
-                console.log("Search request: " + apiUrl+parameters+apiKeys[0]+" pages "+pagecount);
-                try{
+                console.log("Search request: " + apiUrl + parameters + apiKeys[0] + " pages " + pagecount);
+                try {
                     //Etistään ensiksi yhden sivun verran elokuva "10" (page=1)
-                    let movies = await fetch(apiUrl+parameters+page+"1"+apiKeys[0]);
+                    let movies = await fetch(apiUrl + parameters + page + "1" + apiKeys[0]);
                     let jsonResponse = await movies.json();
 
                     //Tämän jälkeen lisätään vielä niin monta sivua elokuva kuin kysytään (max 3)
-                    for(let i = 2; i <= pagecount; i++){
-                        let response = await fetch(apiUrl+parameters+page+i+apiKeys[0]);
+                    for (let i = 2; i <= pagecount; i++) {
+                        let response = await fetch(apiUrl + parameters + page + i + apiKeys[0]);
                         let reponseJSON = await response.json();
-                        for (let i = 0; i < Object.keys(reponseJSON.Search).length; i++){
+                        for (let i = 0; i < Object.keys(reponseJSON.Search).length; i++) {
                             jsonResponse.Search.push(reponseJSON.Search[i]);
                         }
                     }
-                    if(movies){
+                    if (movies) {
                         res.json(jsonResponse);
                     }
-                }catch(error){
+                } catch (error) {
                     console.log(error);
                 }
             })();
-        } else if(paramCount>0){
+        } else if (paramCount > 0) {
             (async () => {
-                console.log("Search request: " + apiUrl+parameters+apiKeys[0]);
-                try{
-                    const response = await fetch(apiUrl+parameters+apiKeys[0]);
-                    if(response){
+                console.log("Search request: " + apiUrl + parameters + apiKeys[0]);
+                try {
+                    const response = await fetch(apiUrl + parameters + apiKeys[0]);
+                    if (response) {
                         const jsonResponse = await response.json();
                         res.json(jsonResponse);
                     }
-                }catch(error){
+                } catch (error) {
                     console.log(error);
                 }
             })();
@@ -108,6 +149,8 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
     });
 
+
+/*
     //showcomments?id=elokuvanid
     app.get('/showcomments', cors(), (req,res)=>{
         var q = url.parse(req.url, true).query;
@@ -139,6 +182,8 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
                             returnArray.push(rows2);
 
                          */
+
+    /*
                         string = JSON.stringify(rows2);
                         //console.log(string);
                     }
@@ -186,6 +231,9 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
                             returnArray.push(rows2);
 
                          */
+
+
+    /*
                         string = JSON.stringify(rows2);
                         //console.log(string);
                     }
@@ -200,5 +248,5 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
             }
         })();
-    })
+    }) */
 }
