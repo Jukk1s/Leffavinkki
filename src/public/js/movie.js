@@ -154,7 +154,10 @@ function showComments(id){
                             let header = jsonResponse[i].header;
                             let comment = jsonResponse[i].comment;
                             let date = jsonResponse[i].date;
-                            console.log(reviewID+", "+commentID,+", "+header+", "+comment+", "+date);
+                            let userId = jsonResponse[i].users_id;
+                            let userName = jsonResponse[i].name;
+                        //    console.log(reviewID+", "+commentID,+", "+header+", "+comment+", "+date+", "+userId);
+
 
                             let cDiv = document.createElement('div');
                             cDiv.className = "comment";
@@ -168,17 +171,18 @@ function showComments(id){
                             cHeader.innerHTML = header;
                             contentDiv.appendChild(cHeader);
 
+                            let cText = document.createElement('p');
+                            cText.innerHTML = comment;
+                            contentDiv.appendChild(cText);
+
+                            let cAuthor = document.createElement('p');
+                            cAuthor.innerHTML = "Käyttäjä: " + userName;
+                            contentDiv.appendChild(cAuthor);
+
                             let cDate = document.createElement('h5');
                             cDate.innerHTML = date;
                             contentDiv.appendChild(cDate);
 
-                            let cAuthor = document.createElement('h4');
-                            cAuthor.innerHTML = reviewID;
-                            contentDiv.appendChild(cAuthor);
-
-                            let cText = document.createElement('p');
-                            cText.innerHTML = comment;
-                            contentDiv.appendChild(cText);
                             cDiv.appendChild(pDiv);cDiv.appendChild(contentDiv);
                             comments.appendChild(cDiv);
                         }

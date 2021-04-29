@@ -24,7 +24,6 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         let userId = req.user.id;
         let rating = 3; // Muokataan myöhemmin tämä kuntoon
 
-
         try {
             (async () => {
                 let sql = "SELECT * FROM reviews WHERE users_id = ? AND movie_id = ?";
@@ -146,34 +145,44 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
                 }
             })();
         }
-
     });
 
-
-/*
+    //Palauttaa kaikki tietyn elokuvan kommentit
     //showcomments?id=elokuvanid
     app.get('/showcomments', cors(), (req,res)=>{
-        var q = url.parse(req.url, true).query;
+        let q = url.parse(req.url, true).query;
         const movieId = q.id;
-        var sql = "SELECT * FROM reviews WHERE movie_id = ?";
-        var string;
+        let sql;
+        sql = "SELECT * FROM comments WHERE movie_id = ?";
+
         (async () => {
             try {
-                const rows = await query(sql, [movieId]);
-
-                string = JSON.stringify(rows);
-
-                sql = "SELECT * FROM comments WHERE reviews_id = ?";
+                const commentRows = await query(sql, [movieId]);
 
                 var returnArray = [];
 
-                //console.log(string);
-                for(var i = 0; i < rows.length; i++){
-                    if(rows[i].hasOwnProperty('id')) {
-                        const rows2 = await query(sql, rows[i].id);
+                //Käydään läpi jokaisen kommentin käyttäjä-id
+                //ja lisätään palautettavaan JSONiin jokaista id:tä vastaava käyttäjänimi
+                for(var i = 0; i < commentRows.length; i++){
+
+                    if(commentRows[i].hasOwnProperty('movie_id')) {
+                        for (let j = 0; j < commentRows.length; j++) {
+
+                            let userId = commentRows[i].users_id;
+                            sql = "SELECT name FROM users WHERE id = ?";
+                            const nameRow = await query(sql, [userId]);
+                            let name = nameRow[0].name;
+                            commentRows[j].name = name; //Tällä lisätään uusi sarake JSONiin
+
+                            returnArray.push(commentRows[j]);
+                        }
+
+                        /*
+
+                        const rows2 = await query(sql, rows[i].users_id);
                         for(var l = 0; l < rows2.length; l++){
                             returnArray.push(rows2[l]);
-                        }
+                        }  /*
 
                         /*
                         if(JSON.stringify(returnArray) === "{}")
@@ -183,11 +192,12 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
                          */
 
-    /*
-                        string = JSON.stringify(rows2);
-                        //console.log(string);
+                     //   string = JSON.stringify(rows2);
+                    //    console.log(string);
                     }
                 }
+
+                console.log(returnArray);
                 res.json(returnArray);
 
             }
@@ -200,26 +210,33 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         })();
     })
 
+    //Palauttaa kaikki tietyn käyttäjän kirjoittamat kommentit
+    //usercomments?id=käyttäjänid
     app.get('/usercomments', cors(), (req,res)=>{
         var q = url.parse(req.url, true).query;
         const profileId = q.id;
         console.log('Searching for profile with id: '+profileId);
-        var sql = "SELECT * FROM reviews WHERE users_id = ?";
+
         var string;
         (async () => {
             try {
+                let sql = "SELECT * FROM comments WHERE users_id = ? ORDER by movie_id";
+                let returnArray = [];
                 const rows = await query(sql, [profileId]);
 
-                string = JSON.stringify(rows);
+                for (let i = 0; i < rows.length; i++) {
+                    returnArray.push(rows[i]);
+                }
+                string = JSON.stringify(returnArray);
+             //   console.log(string);
+                res.json(returnArray);
 
-                sql = "SELECT * FROM comments WHERE reviews_id = ?";
 
-                var returnArray = [];
+                /*
 
-                //console.log(string);
                 for(var i = 0; i < rows.length; i++){
                     if(rows[i].hasOwnProperty('id')) {
-                        const rows2 = await query(sql, rows[i].id);
+                        const rows2 = await query(sql, profileId);
                         for(var l = 0; l < rows2.length; l++){
                             returnArray.push(rows2[l]);
                         }
@@ -232,14 +249,13 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
                          */
 
-
-    /*
+/*
                         string = JSON.stringify(rows2);
                         //console.log(string);
                     }
                 }
-                res.json(returnArray);
-
+                res.json(returnArray, rows);
+*/
             }
             catch (err){
                 console.log("Database error!"+err);
@@ -248,5 +264,45 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
             }
         })();
-    }) */
+    })
+
+    //Palauttaa kaikki käyttäjän antamat arvostelut ilman kommentteja
+    //userreviews?id=käyttäjänid
+    app.get('/userreviews', cors(), (req, res) => {
+        let q = url.parse(req.url, true).query;
+        let userId = q.id;
+        let sql = "SELECT review, movie_id FROM reviews WHERE users_id = ?";
+        let returnArray = [];
+
+        (async () => {
+            try {
+                const rows = await query(sql, [userId]);
+                for (let i = 0; i < rows.length; i++) {
+                    returnArray.push(rows[i]);
+                }
+                res.json(returnArray);
+
+            } catch (error) {
+                console.log(error);
+            }
+        })();
+    })
+
+    //Jotta saadaan kommentin kirjoittajan nimimerkki näkyviin
+    //getusername/?id=käyttäjänid
+    app.get('/getusername', cors(), (req, res) => {
+        let q = url.parse(req.url, true).query;
+        let userId = q.id;
+        let sql = "SELECT name FROM users WHERE id = ?";
+
+        (async () => {
+            try {
+                const name = await query(sql, [userId]);
+                res.json(name);
+
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    })
 }
