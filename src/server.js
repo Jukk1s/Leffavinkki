@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 const mysql = require('mysql');
-const isLocalhost = true;
+const isLocalhost = false;
 var conn = mysql;
 
 //Koitetaan ottaa yhteyttä muuttujan "isLocalhost" mukaan
@@ -44,11 +44,15 @@ if(isLocalhost){
         database: process.env.MYSQL_DATABASE
     });
 } else {
+    conn = mysql.createConnection('mysql://'+process.env.MYSQL_M_CREDENTIALS+'@'+process.env.MYSQL_M_URL);
+    /*
     conn = mysql.createConnection({
-        host: '//mysql.metropolia.fi/eljash',
+        host: 'https://mysql.metropolia.fi/eljash',
         user: 'eljash',
         password:'r3dDevil',
         database: 'eljash'});
+
+     */
 }
 
 conn.connect(function(err){
