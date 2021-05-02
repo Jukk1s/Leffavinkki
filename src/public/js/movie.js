@@ -38,7 +38,7 @@ $('#commentForm').submit(function(e){
     var jsonFormData = JSON.parse(formData);
 
     console.log(jsonFormData);
-    const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjEsImlhdCI6MTYxOTYyNDE4Nn0.DbKQGpUg0GnsYDutPTGtQc2EvOhHPx1srN7KtVc4n6s";
+    const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImlhdCI6MTYxOTk3NjI3Mn0._lNE95-ldFg3XJSXx3H9z9H1Gk6D1qQ75GePjmAxutA";
     $.ajax({
         beforeSend: function(request) {
             request.setRequestHeader("auth-token", authorizationToken);

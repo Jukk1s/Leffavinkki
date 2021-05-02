@@ -14,7 +14,7 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
     app.use(cors({credentials: true, origin: true}));
 
 
-    app.post('/movies/addcomment', verify, (req, res) => {
+    app.post('/movies/addcomment', verify, (req, res, next) => {
         console.log(readToken.readId(req.header('auth-token')));
         console.log(req);
 
@@ -24,29 +24,33 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         let userId = req.user.id;
         let rating = 3; // Muokataan myöhemmin tämä kuntoon
 
-        try {
-            (async () => {
-                let sql = "SELECT * FROM reviews WHERE users_id = ? AND movie_id = ?";
-                const rows = await query(sql, [userId, movieId]);
+        if(commentHeader && comment && movieId && userId && rating)
+            try {
+                (async () => {
+                    let sql = "SELECT * FROM reviews WHERE users_id = ? AND movie_id = ?";
+                    const rows = await query(sql, [userId, movieId]);
 
-                if (rows.length > 0) {
-                    let sql2 = "UPDATE reviews SET review = ? WHERE users_id = ? AND movie_id = ?";
-                    await query(sql2, [rating, userId, movieId]);
-                } else {
-                    let sql3 = "INSERT INTO reviews (users_id, movie_id, review) VALUES (?, ?, ?)";
-                    await query(sql3, [userId, movieId, rating]);
-                }
+                    if (rows.length > 0) {
+                        let sql2 = "UPDATE reviews SET review = ? WHERE users_id = ? AND movie_id = ?";
+                        await query(sql2, [rating, userId, movieId]);
+                    } else {
+                        let sql3 = "INSERT INTO reviews (users_id, movie_id, review) VALUES (?, ?, ?)";
+                        await query(sql3, [userId, movieId, rating]);
+                    }
 
-                let sql4 = "INSERT INTO comments (users_id, movie_id, header, comment) VALUES (?, ?, ?, ?)";
-                const rows4 = await query(sql4, [userId, movieId, commentHeader, comment]);
-                let string = JSON.stringify(rows4);
+                    let sql4 = "INSERT INTO comments (users_id, movie_id, header, comment) VALUES (?, ?, ?, ?)";
+                    const rows4 = await query(sql4, [userId, movieId, commentHeader, comment]);
+                    let string = JSON.stringify(rows4);
 
-                res.send(string);
+                    res.send(string);
 
-            })()
+                })()
 
-        } catch (err) {
-            console.log("Database error! " + err);
+            } catch (err) {
+                console.log("Database error! " + err);
+            }
+        else {
+            res.send('Comment lacks elements.');
         }
 
     })
