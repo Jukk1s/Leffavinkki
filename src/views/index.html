@@ -5,22 +5,31 @@
     <title>Title</title>
     <link href="/css/indexstyle.css" type="text/css" rel="stylesheet">
 </head>
-<body onload="showLastSearch()">
-<div>
-    <div id="hakukentta">
-        <label for="movie_name">Elokuvan nimi:</label><br>
-        <input type="text" id="movie_name" name="movie_name"><br>
-        <label for="movie_year">Vuosi (valinnallinen):</label><br>
-        <input type="number" min="0" id="movie_year" name="movie_year"><br><br>
-        <button onclick="getMovies()">Search</button>
-    </div>
-    <div id="resultField"></div>
-</div>
+<body onload="getRecommended();showLastSearch();">
+
 <ul class="navbar">
     <li><a href="login.html">Kirjatuminen</a></li>
     <li><a href="credits.html">Tekijät</a></li>
     <li class="active"><a href="index.htm">Etusivu</a></li>
 </ul>
+
+<div id="hakukentta">
+    <label for="movie_name">Elokuvan nimi:</label><br>
+    <input type="text" id="movie_name" name="movie_name"><br>
+    <label for="movie_year">Vuosi (valinnallinen):</label><br>
+    <input type="number" min="0" id="movie_year" name="movie_year"><br><br>
+    <button onclick="getMovies()">Search</button>
+</div>
+
+<div id="toprow">
+    <h1 class="centerText">Ylläpidon hotit!</h1>
+    <div id="recommended"></div>
+</div>
+
+<div>
+    <div id="resultField"></div>
+</div>
+
 <script src="/js/indexjs.js"></script>
 </body>
 </html>

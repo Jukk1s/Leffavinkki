@@ -15,8 +15,8 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
 
     app.post('/movies/addcomment', verify, (req, res, next) => {
-        console.log(readToken.readId(req.header('auth-token')));
-        console.log(req);
+        //console.log(readToken.readId(req.header('auth-token')));
+        //console.log(req);
 
         let commentHeader = req.body.header;
         let comment = req.body.content;
@@ -53,6 +53,26 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
             res.send('Comment lacks elements.');
         }
 
+    })
+
+    app.get('/movies/recommended', cors(), (req, res) => {
+        console.log('get recommended');
+        let sql = "SELECT * FROM recommended";
+
+        (async () => {
+            try {
+                const movies = await query(sql);
+                console.log(JSON.stringify(movies));
+                res.json(movies);
+
+            }
+            catch (err){
+                console.log("Database error!"+err);
+            }
+            finally {
+
+            }
+        })();
     })
 
     app.get('/movies', cors(), function (req, res) {
@@ -151,9 +171,34 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         }
     });
 
+    //Palauttaa kaikki tietyn elokuvan arvostelut
+    //movies/getreviews?id=elokuvanid
+
+    app.get('/movies/getreviews', cors(), (req,res)=>{
+        let q = url.parse(req.url, true).query;
+        const movieId = q.id;
+        let sql;
+        sql = "SELECT * FROM reviews WHERE movie_id = ?";
+        //console.log(movieId);
+
+        (async () => {
+            try {
+                const reviews = await query(sql, [movieId]);
+                //console.log(JSON.stringify(reviews));
+                res.json(reviews);
+            }
+            catch (err){
+                console.log("Database error!"+err);
+            }
+            finally {
+
+            }
+        })();
+    })
+
     //Palauttaa kaikki tietyn elokuvan kommentit
-    //showcomments?id=elokuvanid
-    app.get('/showcomments', cors(), (req,res)=>{
+    //movies/getcomments?id=elokuvanid
+    app.get('/movies/getcomments', cors(), (req,res)=>{
         let q = url.parse(req.url, true).query;
         const movieId = q.id;
         let sql;
@@ -198,7 +243,7 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
                     }
                 }
 
-                console.log(returnArray);
+                //console.log(returnArray);
                 res.json(returnArray);
 
             }
