@@ -23,7 +23,7 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         let movieId = req.body.movieId;
         let userId = req.user.id;
 
-        if(commentHeader && comment && movieId && userId && rating)
+        if(commentHeader && comment && movieId && userId)
             try {
                 (async () => {
 

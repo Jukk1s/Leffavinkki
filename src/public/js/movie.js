@@ -4,6 +4,8 @@ let apiKey = "&apikey=bfbd237f";
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const movieID = urlParams.get('id');
+const commentField = document.getElementById("newComment");
+const headerField = document.getElementById("newHeading");
 
 function onLoad(){
     showMovie();
@@ -165,6 +167,8 @@ function showComments(id){
 
     const comments = document.getElementById('comments');
     comments.innerHTML = "";
+    commentField.value = "";
+    headerField.value = "";
     try {
         (async () => {
             console.log("Searching for comments: "+nodeServer+"/movies/getcomments?id="+id);
@@ -226,6 +230,7 @@ function showComments(id){
 
 function getReviews(){
     const starReview = document.getElementById('starReview');
+    const reviewCountField = document.getElementById('reviewCount');
     try {
         (async () => {
             console.log("Searching for reviews: "+nodeServer+"/movies/getreviews?id="+movieID);
@@ -248,6 +253,7 @@ function getReviews(){
                         median = sum/reviewCount;
                     console.log('Reviews: '+reviewCount+", median: "+median+" - sum: "+sum);
                     displayReview(Math.round(median));
+                    reviewCountField.innerHTML = "Arvosteltu " + reviewCount + " kertaa";
                 }
             } catch (error) {
                 console.log(error);
