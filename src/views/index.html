@@ -12,15 +12,16 @@
     <li><a href="credits.html">Tekijät</a></li>
     <li><a href="login.html">Kirjatuminen</a></li>
     <li><a href="register.html">Rekisteröinti</a></li>
+    <div id="hakukentta">
+        <input type="text" id="movie_name" placeholder="Elokuvan nimi:" name="movie_name">
+        <input type="number" min="0" id="movie_year" placeholder="Vuosi (valinnainen):" name="movie_year">
+        <button onclick="getMovies()">Hae</button>
+    </div>
 </ul>
 
-<div id="hakukentta">
-    <label for="movie_name">Elokuvan nimi:</label><br>
-    <input type="text" id="movie_name" name="movie_name"><br>
-    <label for="movie_year">Vuosi (valinnallinen):</label><br>
-    <input type="number" min="0" id="movie_year" name="movie_year"><br><br>
-    <button onclick="getMovies()">Search</button>
-</div>
+
+
+<div class="spacediv"></div>
 
 <div id="toprow">
     <h1 class="centerText">Ylläpidon hotit!</h1>

@@ -70,20 +70,22 @@ body {
 }
 
 #resultField {
-    left: 3%;
+    left: 15%;
+    right: 15%;
     top: 10%;
     max-width: 70%;
+    background-color: darkgrey;
 }
 
 
 #hakukentta {
     position: fixed;
-    right: 3%; /* 16px */
-    top: 12%; /* 76px */
-    border: 5px solid black; /* 5px */
-    width: 25%;
-    height: 30%;
-    padding: 1%;
+    right: 35%; /* 16px */
+    top: 0.5%; /* 76px */
+    border: 3px solid black; /* 5px */
+    width: 21.5%;
+    height: 2.5%;
+    padding: 0.5%;
     font-size: larger;
     background-color: darkgrey;
 }
@@ -93,6 +95,7 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 9999;
 }
 
 ul {
@@ -139,6 +142,10 @@ li a:hover:not(.active) {
     overflow: hidden;
     width: fit-content;
     margin-right: auto; margin-left: auto;
+}
+
+.spacediv {
+    margin-top: 100px;
 }
 
 .recommendedDiv {
