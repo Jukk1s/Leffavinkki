@@ -51,7 +51,7 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         let movieId = req.body.movie_id;
         let userId = req.user.id;
 
-        if (rating) {
+        if (rating && movieId && userId) {
             (async () => {
                 try {
                     let sql = "SELECT * FROM reviews WHERE users_id = ? AND movie_id = ?";

@@ -108,21 +108,15 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
 
     //http://localhost:8081/users/login?email=&password=
     app.post('/users/login',cors(), (req, res) => {
-        /*
-        var q = url.parse(req.url, true).query;
-        const user = { email: q.email, password: q.password };
-        const email = user.email;
-        const password = user.password;
-        */
         console.log(req.body);
         const email = req.body.email;
         const password = req.body.password;
         var sql = "SELECT * FROM users WHERE email = ? AND password = SHA1(?)";
         var string;
-        if(!email || !password)
-            res.send("Sähköposti tai salasana ei ole määritetty.");
-        else
-        (async () => {
+        if(!email || !password) {
+            res.header("login", "Sähköposti tai salasana ei ole määritetty.").send();
+            res.header("status", "failed").send();
+        } else (async () => {
             try {
                 const rows = await query(sql, [email, password]);
 
@@ -132,11 +126,12 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
                     //Tehdään token
                     const token = jwt.sign({id: rows[0].id}, process.env.TOKEN_SECRET);
                     res.header('auth-token', token).send(token);
+                    res.header("login", "Kirjautuminen onnistui.").send();
+                    res.header("status", "success").send();
                 } else {
-                    res.send("Email and password don't match");
                     string = JSON.stringify(rows);
-                    console.log(string);
-                    res.send("Email and password don't match");
+                    res.header("login", "Kirjautuminen onnistui. Sähköposti ja salasana eivät täsmää.").send();
+                    res.header("status", "failed").send();
                 }
             }
             catch (err){
