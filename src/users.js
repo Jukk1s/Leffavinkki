@@ -28,6 +28,9 @@ module.exports = function(app, cors, url, query, dotenv,jwt) {
         const userID = q.id;
         var sql = "SELECT * FROM users WHERE id = ?";
         var string;
+        if(!userID)
+            res.send("Käyttäjän id ei ole validi.");
+        else
         (async () => {
             try {
                 const rows = await query(sql, [userID]);
@@ -64,6 +67,9 @@ module.exports = function(app, cors, url, query, dotenv,jwt) {
         const email = user.email;
         var sql = "SELECT * FROM users WHERE name = ? OR email = ?";
         var string;
+        if(!name || !password || !email)
+            res.send("Nimi, sähköposti tai salasana kenttä ei ole validi.")
+        else
         (async () => {
             try {
                 const rows = await query(sql, [name, email]);
@@ -106,6 +112,9 @@ module.exports = function(app, cors, url, query, dotenv,jwt) {
         const password = user.password;
         var sql = "SELECT * FROM users WHERE email = ? AND password = SHA1(?)";
         var string;
+        if(!email || !password)
+            res.send("Sähköposti tai salasana ei ole määritetty.");
+        else
         (async () => {
             try {
                 const rows = await query(sql, [email, password]);
