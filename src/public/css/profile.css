@@ -8,7 +8,7 @@
     color: silver;
 }
 
-#name, #title, #genres, .reviewsCount, #mostViewed, #status, #commentCount {
+#name, #title, #genres, .reviewsCount, #mostViewed, #status, #commentCount, #description {
     text-align: center;
 }
 

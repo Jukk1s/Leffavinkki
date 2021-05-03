@@ -1,7 +1,6 @@
 const nodeServer = "http://localhost:8081";
 
 function getMovies() {
-    <!--         UUSI TAPA             -->
     <!--    HAETAAN NODE SERVERILTÄ    -->
 
     let name = document.getElementById("movie_name").value.replace(/  +/g, '%20');
@@ -13,15 +12,15 @@ function getMovies() {
         movieYear = "&y=" + year;
     }
 
-    let url = nodeServer + "/movies?s=";
+    let url = nodeServer + "/movies?page=3&s=";
 
     (async () => {
-        console.log(url + name + movieYear + ", " + Number.isInteger(year) + year);
+        //console.log(url + name + movieYear + ", " + Number.isInteger(year) + year);
         try{
             const response = await fetch(url + name + movieYear);
             if(response){
                 const jsonResponse = await response.json();
-                console.log(jsonResponse);
+                //console.log(jsonResponse);
                 localStorage.setItem("lastSearch", JSON.stringify(jsonResponse));
                 showResults(jsonResponse);
             }
@@ -29,40 +28,83 @@ function getMovies() {
             console.log(error);
         }
     })();
+}
 
+function getRecommended(){
+    <!--    HAETAAN NODE SERVERILTÄ    -->
 
-    <!--         VANHA TAPA            -->
-    /*
-    //document.getElementById("resultField").innerHTML = "";
-
-    let name = document.getElementById("movie_name").value.replace(/  +/g, '%20');
-    //name.replace(/\s/g, '')
-    let year = Number(document.getElementById("movie_year").value);
-
-    let movieYear = "";
-
-    if(year > 1800 && Number.isInteger(year)){
-        movieYear = "&y=" + year;
-    }
-    let url = "http://www.omdbapi.com/?r=json&s=";
-    let apiKey = "&apikey=bfbd237f";
+    let url = nodeServer + "/movies/recommended";
+    console.log(nodeServer + "/movies/recommended");
 
     (async () => {
-        console.log(url + name + movieYear + apiKey + ", " + Number.isInteger(year) + year);
         try{
-            const response = await fetch(url + name + movieYear + apiKey);
+            const response = await fetch(url);
             if(response){
                 const jsonResponse = await response.json();
                 console.log(jsonResponse);
-                localStorage.setItem("lastSearch", JSON.stringify(jsonResponse));
-                showResults(jsonResponse);
+                localStorage.setItem("lastRecommended", JSON.stringify(jsonResponse));
+                showRecommended(jsonResponse);
             }
         }catch(error){
             console.log(error);
         }
     })();
+}
 
-     */
+function showRecommended(jsonResponse){
+    const div = document.getElementById('recommended');
+    //Tyhjennetään tuloskenttä ennen elokuvien näyttämistä
+    div.innerHTML = "";
+
+    //for (let i = 0; i < Object.keys(jsonResponse.Search).length; i++)
+    for (let i = 0; i < jsonResponse.length; i++) {
+        //Jokaiselle elokuvalle oma a- ja div -elementti
+        let movieLink = document.createElement("a");
+
+        console.log(jsonResponse[i].movie_id);
+
+        movieLink.href = "http://localhost:8081/movie?id="+jsonResponse[i].movie_id;
+
+        let movieDiv = document.createElement("div");
+        movieDiv.classList.add("movieDiv");
+        movieDiv.classList.add("recommendedDiv");
+
+
+        //Elokuvan JSON
+        const data = jsonResponse[i];
+        //console.log(data);
+
+
+        movieDiv.addEventListener('click', function(){
+            console.log(data);
+            openMovie(data);
+        });
+
+
+        let overlay = document.createElement("div");
+        overlay.classList.add('overlay');
+        let h = document.createElement("h3");
+        h.innerHTML = jsonResponse[i].header;
+        //let comment = document.createElement("p");
+        //comment.innerHTML = jsonResponse[i].comment;
+        overlay.appendChild(h);
+        //overlay.appendChild(comment);
+        movieDiv.appendChild(overlay);
+
+        let img = document.createElement("img");
+        img.src = jsonResponse[i].movie_poster;
+        img.alt = "Poster of " + jsonResponse[i].movie_title;
+
+        //Jos kuva ei lataa
+        img.onerror = function() {
+            this.src = '/img/poster_holder.jpg';
+        }
+        img.classList.add('poster');
+        movieDiv.appendChild(img);
+
+        movieLink.appendChild(movieDiv);
+        div.appendChild(movieLink);
+    }
 }
 
 function showResults(jsonResponse) {
@@ -83,7 +125,7 @@ function showResults(jsonResponse) {
         movieLink.href = "http://localhost:8081/movie?id="+jsonResponse.Search[i].imdbID;
 
         let movieDiv = document.createElement("div");
-        movieDiv.className = "movieDiv";
+        movieDiv.classList.add("movieDiv");
         let h = document.createElement("h3");
 
 
@@ -104,11 +146,24 @@ function showResults(jsonResponse) {
         let img = document.createElement("img");
         img.src = jsonResponse.Search[i].Poster;
         img.alt = "Poster of " + jsonResponse.Search[i].Title;
+
+        //Jos kuva ei lataa
+        img.onerror = function() {
+            this.src = '/img/poster_holder.jpg';
+        }
+        img.classList.add('poster');
         movieDiv.appendChild(img);
 
         movieLink.appendChild(movieDiv);
         div.appendChild(movieLink);
     }
+}
+
+function onImgError(source){
+    console.log('IMAGE ERROR!!!!');
+    source.src="/img/poster_holder.jpg";
+    source.onerror = "";
+    return true;
 }
 
 function openMovie(data){

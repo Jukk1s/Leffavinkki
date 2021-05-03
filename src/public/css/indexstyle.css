@@ -1,4 +1,5 @@
 .movieDiv {
+    width: 200px;
     padding: 10px;
     transition: transform .2s; /* Animation */
     display: inline-block;
@@ -42,6 +43,19 @@
     transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
+.movieDiv,a{
+    color: black;
+}
+.movieDiv:hover .poster{
+    box-shadow: 5px 10px #888888;
+}
+
+.movieDiv h3{
+    text-align: center;
+    overflow-x:hidden;
+    white-space: normal;
+}
+
 body {
     font-family: Arial, Verdana, sans-serif;
     background-color: #333333;
@@ -49,13 +63,13 @@ body {
     margin: 0;
 }
 
-img {
-    width: 70%;
+.poster {
+    transition: box-shadow .3s;
+    width: 200px;
     height: auto;
 }
 
 #resultField {
-    position: absolute;
     left: 3%;
     top: 10%;
     max-width: 70%;
@@ -115,3 +129,43 @@ li a:hover:not(.active) {
     border-radius: 4px;
 }
 
+.centerText {
+    text-align: center;
+}
+
+#toprow {
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: fit-content;
+    margin-right: auto; margin-left: auto;
+}
+
+.recommendedDiv {
+    margin-left: auto; margin-right: auto;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.recommendedDiv:hover .overlay {
+    width: 100%;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(1, 9, 13, 0.73);
+    overflow: hidden;
+    width: 0;
+    height: 100%;
+    transition: .2s ease;
+}
+
+.overlay p, .overlay h3 {
+    text-align: center;
+    white-space: normal;
+    color: white;
+}

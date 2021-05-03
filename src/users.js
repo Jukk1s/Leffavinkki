@@ -31,9 +31,18 @@ module.exports = function(app, cors, url, query, dotenv,jwt) {
         (async () => {
             try {
                 const rows = await query(sql, [userID]);
+                sql = "SELECT * FROM profiles WHERE id = ?"
+                const rows2 = await query(sql, [userID]);
 
+                //const obj1 = JSON.parse(rows[0]);
+                //const obj2 = JSON.parse(rows2[0]);
                 console.log(rows[0]);
-                string = JSON.stringify(rows[0]);
+                let mergedObject = [];
+                mergedObject.push(rows[0]);
+                mergedObject.push(rows2[0]);
+                console.log("----"+JSON.stringify(mergedObject));
+                //console.log(JSON.stringify(mergedObject));
+                string = JSON.stringify(mergedObject);
                 res.send(string);
             }
             catch (err){

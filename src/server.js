@@ -24,16 +24,15 @@ const jwt = require('jsonwebtoken');
 
 dotenv.config();
 
-console.log(process.env.MYSQL_USERNAME);
-
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 const mysql = require('mysql');
-const isLocalhost = true;
+const isLocalhost = false;
 var conn = mysql;
+let sqlserver;
 
 //Koitetaan ottaa yhteyttä muuttujan "isLocalhost" mukaan
 if(isLocalhost){
@@ -43,17 +42,15 @@ if(isLocalhost){
         password: process.env.MYSQL_PASSWORD,
         database: process.env.MYSQL_DATABASE
     });
+    sqlserver = "localhost";
 } else {
-    conn = mysql.createConnection({
-        host: '//mysql.metropolia.fi/eljash',
-        user: 'eljash',
-        password:'r3dDevil',
-        database: 'eljash'});
+    conn = mysql.createConnection('mysql://'+process.env.MYSQL_M_CREDENTIALS+'@'+process.env.MYSQL_M_URL);
+    sqlserver = process.env.MYSQL_M_URL;
 }
 
 conn.connect(function(err){
     if (err) throw err;
-    console.log("Connected to MySQL");
+    console.log("Connected to "+sqlserver+" MySQL");
 });
 
 
@@ -61,7 +58,7 @@ const query = util.promisify(conn.query).bind(conn);
 
 require('./routes')(app, cors);
 require('./users')(app, cors, url, query, dotenv,jwt);
-require('./movies')(app,cors, url, query, fetch);
+require('./movies')(app,cors, url, query, fetch, bodyParser);
 
 /*app.post('/process_post', urlencodedParser,
     [check('first_name').isLength({ min: 2 }).withMessage("vähintään kaksi merkkiä!"),

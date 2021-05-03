@@ -7,14 +7,14 @@
     <link href="/css/movie.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body onload="showMovie()">
+<body onload="onLoad()">
 <div>
     <div id="movieColumn">
         <div id="intro">
             <div>
                 <div>
                     <h1 id="title"></h1>
-                    <h3 style="text-align: center; color: silver;">LeffaVinkki: (ei vielä tehty)</h3>
+                    <h3 style="text-align: center; color: silver;">LeffaVinkki rating</h3>
                     <div id="starReview">
                         <span id="star1" class="fa fa-star checked"></span>
                         <span id="star2" class="fa fa-star checked"></span>
@@ -54,11 +54,11 @@
             </div>
             <h3>Kirjoita kommentti</h3>
             <div class="comment">
-                <form>
+                <form id="commentForm" action="/movies/addcomment" method="post">
                     <input type="text" placeholder="Otsikko" id="newHeading">
                     <input type="text" placeholder="Kommentti" id="newComment">
                     <br>
-                    <input type="button" value="Lähetä">
+                    <input type="submit" value="Lähetä"/>
                 </form>
             </div>
 
@@ -69,6 +69,7 @@
 
 
 </div>
+<script src="/js/jquery-3.6.0.min.js"></script>
 <script src="/js/movie.js"></script>
 </body>
 </html>
