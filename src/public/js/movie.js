@@ -35,12 +35,12 @@ for(let i = 0; i < newReviewStars.length; i++){
     newReviewStars[i].addEventListener("mouseenter", function(event){
         starRemoveHighlight();
         for(let l = 0; l <= i; l++){
-            newReviewStarts[l].classList.add('checked');
+            newReviewStars[l].classList.add('checked');
         }
     });
     newReviewStars[i].addEventListener("mouseleave", function(event){
         for(let l = 0; l <= i; l++){
-            newReviewStarts[l].classList.remove('checked');
+            newReviewStars[l].classList.remove('checked');
         }
         highlightSelectedStar();
     });
