@@ -30,9 +30,12 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
             try {
                 (async () => {
 
-                    let sql4 = "INSERT INTO comments (users_id, movie_id, header, comment) VALUES (?, ?, ?, ?)";
-                    const rows4 = await query(sql4, [userId, movieId, commentHeader, comment]);
-                    let string = JSON.stringify(rows4);
+                    let sql = "INSERT INTO comments (users_id, movie_id, header, comment) VALUES (?, ?, ?, ?)";
+                    const rows = await query(sql, [userId, movieId, commentHeader, comment]);
+                    let string = JSON.stringify(rows);
+
+                    sql = "UPDATE profiles SET reviews = reviews + 1 WHERE id = ?";
+                    const rows2 = await query(sql, [userId]);
 
                     res.send(string);
 

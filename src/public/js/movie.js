@@ -56,8 +56,16 @@ for(let i = 0; i < newReviewStars.length; i++){
 $('#commentForm').submit(function(e){
     e.preventDefault();
 
-    var formData =  '{"movieId":"' + movieID + '", "header":"' + document.getElementById('newHeading').value
-        + '" , "content":"' + document.getElementById('newComment').value + '" }';
+    let newHeading = (document.getElementById('newHeading').value).replace(/[\-[\]\\'/"]/g, "\\$&");
+    let newComment = (document.getElementById('newComment').value).replace(/[\-[\]\\'/"]/g, "\\$&");
+    //newHeading.replace(/[!@#$%^&*()+=\-[\]\\';,./{}|":<>?~_]/g, "\\$&");
+    //newComment.replace(/[!@#$%^&*()+=\-[\]\\';,./{}|":<>?~_]/g, "\\$&");
+    console.log(newHeading);
+    console.log(newComment);
+
+
+    var formData =  '{"movieId":"' + movieID + '", "header":"' + newHeading
+        + '" , "content":"' + newComment + '" }';
     var jsonFormData = JSON.parse(formData);
 
     console.log(jsonFormData);
@@ -220,7 +228,7 @@ function showComments(id){
 
                             let cAuthor = document.createElement('p');
                             cAuthor.innerHTML = "Käyttäjä: " + userName;
-                            
+
                             cAuthorProfile.appendChild(cAuthor);
                             contentDiv.appendChild(cAuthorProfile);
 
