@@ -15,7 +15,7 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
 
     app.post('/movies/addcomment', verify, (req, res, next) => {
-        //console.log(readToken.readId(req.header('auth-token')));
+        console.log(readToken.readId(req.header('auth-token')));
         //console.log(req);
 
         let commentHeader = req.body.header;

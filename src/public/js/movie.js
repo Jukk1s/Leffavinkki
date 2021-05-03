@@ -49,7 +49,7 @@ for(let i = 0; i < newReviewStars.length; i++){
 $('#commentForm').submit(function(e){
     e.preventDefault();
 
-    var formData =  '{"movieId":"' + movieId + '", "header":"' + document.getElementById('newHeading').value + '" , "content":"' + document.getElementById('newComment').value + '" }';
+    var formData =  '{"movieId":"' + movieID + '", "header":"' + document.getElementById('newHeading').value + '" , "content":"' + document.getElementById('newComment').value + '" }';
     var jsonFormData = JSON.parse(formData);
 
     console.log(jsonFormData);
@@ -62,7 +62,7 @@ $('#commentForm').submit(function(e){
         type: 'post',
         data: jsonFormData,
         success:function(){
-            showComments(movieId);
+            showComments(movieID);
         }
     });
 });
