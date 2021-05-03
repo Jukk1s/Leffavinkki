@@ -12,11 +12,14 @@
     <li class="active"><a href="login.html">Kirjatuminen</a></li>
     <li><a href="register.html">Rekisteröinti</a></li>
 </ul>
-<div id="logindiv">
-<p class="logreg_text">
-    Olen suomalainen.
-</p>
+<div id="logregdiv">
+    <label class="labeli" for="email">Sähköposti:</label><br>
+    <input class="input" type="email" id="email" name="email"><br>
+    <label class="labeli" for="password">Salasana:</label><br>
+    <input class="input" type="text" min="4" id="password" name="password"><br><br>
+    <button id="regbutton" onclick="getMovies()">Luo käyttäjä</button>
 </div>
+
 
 </body>
 </html>
