@@ -125,8 +125,10 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
                     console.log("User logged in with id "+rows[0].id);
                     //Tehdään token
                     const token = jwt.sign({id: rows[0].id}, process.env.TOKEN_SECRET);
-                    res.header('auth-token', token).send(token);
-                    res.header("login", "Kirjautuminen onnistui.").send();
+                    res.header('auth-token', token);
+                    res.header('username', rows[0].name);
+                    res.header('email', rows[0].email);
+                    res.header("login", "Kirjautuminen onnistui.");
                     res.header("status", "success").send();
                 } else {
                     string = JSON.stringify(rows);

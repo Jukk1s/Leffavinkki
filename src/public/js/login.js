@@ -16,12 +16,15 @@ $('#logform').submit(function(e){
         type: 'post',
         data: jsonFormData,
         success:function(){
-            saveToken(xhr.getResponseHeader("auth-token"));
+            saveLoginInfo(xhr.getResponseHeader("auth-token"),xhr.getResponseHeader("username"),xhr.getResponseHeader("email"));
         }
     });
 });
 
-function saveToken(token) {
+function saveLoginInfo(token, username, email) {
+    console.log(token+username+email);
     localStorage.setItem("auth-token",token);
-    console.log(token);
+    localStorage.setItem("logged-user",username);
+    localStorage.setItem("logged-email",email);
+    console.log('Tervetuloa takaisin '+username+"!");
 }
