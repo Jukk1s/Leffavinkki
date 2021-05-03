@@ -6,6 +6,7 @@ const urlParams = new URLSearchParams(queryString);
 const movieID = urlParams.get('id');
 const commentField = document.getElementById("newComment");
 const headerField = document.getElementById("newHeading");
+const authorizationToken = localStorage.getItem('auth-token');
 
 function onLoad(){
     showMovie();
@@ -59,7 +60,7 @@ $('#commentForm').submit(function(e){
     var jsonFormData = JSON.parse(formData);
 
     console.log(jsonFormData);
-    const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImlhdCI6MTYxOTk3NjI3Mn0._lNE95-ldFg3XJSXx3H9z9H1Gk6D1qQ75GePjmAxutA";
+
     $.ajax({
         beforeSend: function(request) {
             request.setRequestHeader("auth-token", authorizationToken);
@@ -90,7 +91,6 @@ function highlightSelectedStar() {
 //Lähettää arvostelun (1-5) serverille
 function addRating(rating) {
     let ratingJson = JSON.parse('{"rating":"' + rating + '", "movie_id":"' + movieID + '"}');
-    const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImlhdCI6MTYxOTk3NjI3Mn0._lNE95-ldFg3XJSXx3H9z9H1Gk6D1qQ75GePjmAxutA";
     //console.log(ratingJson);
     $.ajax({
         type: "post",
