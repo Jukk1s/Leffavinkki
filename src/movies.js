@@ -201,7 +201,7 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         (async () => {
             try {
                 const reviews = await query(sql, [movieId]);
-                //console.log(JSON.stringify(reviews));
+                console.log(JSON.stringify(reviews));
                 res.json(reviews);
             }
             catch (err){
