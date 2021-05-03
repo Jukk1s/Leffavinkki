@@ -22,21 +22,10 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         let comment = req.body.content;
         let movieId = req.body.movieId;
         let userId = req.user.id;
-        let rating = 3; // Muokataan myöhemmin tämä kuntoon
 
         if(commentHeader && comment && movieId && userId && rating)
             try {
                 (async () => {
-                    let sql = "SELECT * FROM reviews WHERE users_id = ? AND movie_id = ?";
-                    const rows = await query(sql, [userId, movieId]);
-
-                    if (rows.length > 0) {
-                        let sql2 = "UPDATE reviews SET review = ? WHERE users_id = ? AND movie_id = ?";
-                        await query(sql2, [rating, userId, movieId]);
-                    } else {
-                        let sql3 = "INSERT INTO reviews (users_id, movie_id, review) VALUES (?, ?, ?)";
-                        await query(sql3, [userId, movieId, rating]);
-                    }
 
                     let sql4 = "INSERT INTO comments (users_id, movie_id, header, comment) VALUES (?, ?, ?, ?)";
                     const rows4 = await query(sql4, [userId, movieId, commentHeader, comment]);
@@ -54,6 +43,34 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         }
 
     })
+
+    app.post('/movies/addrating', verify, (req, res) => {
+        console.log(readToken.readId(req.header('auth-token')));
+        let rating = req.body.rating;
+        console.log(req.body);
+        let movieId = req.body.movie_id;
+        let userId = req.user.id;
+
+        if (rating) {
+            (async () => {
+                try {
+                    let sql = "SELECT * FROM reviews WHERE users_id = ? AND movie_id = ?";
+                    const rows = await query(sql, [userId, movieId]);
+
+                    if (rows.length > 0) {
+                        let sql2 = "UPDATE reviews SET review = ? WHERE users_id = ? AND movie_id = ?";
+                        await query(sql2, [rating, userId, movieId]);
+                    } else {
+                        let sql3 = "INSERT INTO reviews (users_id, movie_id, review) VALUES (?, ?, ?)";
+                        await query(sql3, [userId, movieId, rating]);
+                    }
+                } catch (err){
+                    console.log(err);
+                }
+
+            })();
+        }
+    });
 
     app.get('/movies/recommended', cors(), (req, res) => {
         console.log('get recommended');
@@ -73,7 +90,7 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
             }
         })();
-    })
+    });
 
     app.get('/movies', cors(), function (req, res) {
 

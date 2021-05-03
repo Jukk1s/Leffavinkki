@@ -31,6 +31,8 @@ highlightSelectedStar();
 for(let i = 0; i < newReviewStars.length; i++){
     newReviewStars[i].addEventListener("click", function(event){
         selectedStar = newReviewStars[i];
+        let rating = newReviewStars.indexOf(selectedStar) + 1;
+        addRating(rating);
     });
     newReviewStars[i].addEventListener("mouseenter", function(event){
         starRemoveHighlight();
@@ -46,10 +48,12 @@ for(let i = 0; i < newReviewStars.length; i++){
     });
 }
 
+//Lähettää kommentin serverille
 $('#commentForm').submit(function(e){
     e.preventDefault();
 
-    var formData =  '{"movieId":"' + movieID + '", "header":"' + document.getElementById('newHeading').value + '" , "content":"' + document.getElementById('newComment').value + '" }';
+    var formData =  '{"movieId":"' + movieID + '", "header":"' + document.getElementById('newHeading').value
+        + '" , "content":"' + document.getElementById('newComment').value + '" }';
     var jsonFormData = JSON.parse(formData);
 
     console.log(jsonFormData);
@@ -79,6 +83,21 @@ function highlightSelectedStar() {
     for(let i = 0; i <= newReviewStars.indexOf(selectedStar); i++){
         newReviewStars[i].classList.add('checked');
     }
+}
+
+//Lähettää arvostelun (1-5) serverille
+function addRating(rating) {
+    let ratingJson = JSON.parse('{"rating":"' + rating + '", "movie_id":"' + movieID + '"}');
+    const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImlhdCI6MTYxOTk3NjI3Mn0._lNE95-ldFg3XJSXx3H9z9H1Gk6D1qQ75GePjmAxutA";
+    //console.log(ratingJson);
+    $.ajax({
+        type: "post",
+        url: nodeServer + "/movies/addrating",
+        data: ratingJson,
+        beforeSend: function(request) {
+            request.setRequestHeader("auth-token", authorizationToken);
+        }
+    });
 }
 
 //urlin perässä pitää olla ?id=elokuvanid
