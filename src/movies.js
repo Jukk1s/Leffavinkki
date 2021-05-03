@@ -24,14 +24,15 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         let commentHeader = req.body.header;
         let comment = req.body.content;
         let movieId = req.body.movieId;
+        let movieTitle = req.body.movieTitle;
         let userId = req.user.id;
 
-        if(commentHeader && comment && movieId && userId)
+        if(commentHeader && comment && movieId && userId && movieTitle)
             try {
                 (async () => {
 
-                    let sql = "INSERT INTO comments (users_id, movie_id, header, comment) VALUES (?, ?, ?, ?)";
-                    const rows = await query(sql, [userId, movieId, commentHeader, comment]);
+                    let sql = "INSERT INTO comments (users_id, movie_id, movie_title, header, comment) VALUES (?, ?, ?, ?, ?)";
+                    const rows = await query(sql, [userId, movieId, movieTitle, commentHeader, comment]);
                     let string = JSON.stringify(rows);
 
                     sql = "UPDATE profiles SET reviews = reviews + 1 WHERE id = ?";
@@ -252,28 +253,8 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
                         commentRows[i].name = name; //Tällä lisätään uusi sarake JSONiin
 
                         returnArray.push(commentRows[i]);
-
-                        /*
-
-                        const rows2 = await query(sql, rows[i].users_id);
-                        for(var l = 0; l < rows2.length; l++){
-                            returnArray.push(rows2[l]);
-                        }  /*
-
-                        /*
-                        if(JSON.stringify(returnArray) === "{}")
-                            returnArray = rows2;
-                        else
-                            returnArray.push(rows2);
-
-                         */
-
-                     //   string = JSON.stringify(rows2);
-                    //    console.log(string);
                     }
                 }
-
-                //console.log(returnArray);
                 res.json(returnArray);
 
             }

@@ -7,6 +7,7 @@ const movieID = urlParams.get('id');
 const commentField = document.getElementById("newComment");
 const headerField = document.getElementById("newHeading");
 const authorizationToken = localStorage.getItem('auth-token');
+let movieTitle = "Tyhjä";
 let reviewList = [];
 
 function onLoad(){
@@ -64,7 +65,7 @@ $('#commentForm').submit(function(e){
     console.log(newComment);
 
 
-    var formData =  '{"movieId":"' + movieID + '", "header":"' + newHeading
+    var formData =  '{"movieId":"' + movieID + '", "movieTitle":"' + movieTitle + '", "header":"' + newHeading
         + '" , "content":"' + newComment + '" }';
     var jsonFormData = JSON.parse(formData);
 
@@ -155,6 +156,8 @@ function showResult(data){
     const writers = document.getElementById('writers');
     const actors = document.getElementById('actors');
     const metascore = document.getElementById('metascore');
+
+    movieTitle = data.Title;
 
     h.innerHTML = data.Title+" ("+data.Year+")";
     ratingIMDB.innerHTML = data.imdbRating+"/10";

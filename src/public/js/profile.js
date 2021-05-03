@@ -75,13 +75,13 @@ function showComments(id){
                     const jsonResponse = await response.json();
                     commentCount.innerHTML = jsonResponse.length;
                     reviewsCount.innerHTML = "Kommentit ("+jsonResponse.length+")";
-                    for(var i = 0; i < jsonResponse.length; i++){
+                    for(var i = jsonResponse.length-1; i >= 0; i--){
                         if(jsonResponse[i].hasOwnProperty('id')) {
                             let commentID = jsonResponse[i].id;
+                            let title = jsonResponse[i].movie_title;
                             let header = jsonResponse[i].header;
                             let comment = jsonResponse[i].comment;
                             let date = jsonResponse[i].date;
-                            console.log(commentID,+", "+header+", "+comment+", "+date);
 
                             let cDiv = document.createElement('div');
                             cDiv.className = "comment";
@@ -90,6 +90,14 @@ function showComments(id){
                             pDiv.className = "commentProfilepic";
                             let contentDiv = document.createElement('div');
                             contentDiv.className = "commentContent"
+
+                            let cMovielink = document.createElement('a');
+                            cMovielink.href = nodeServer+"/movie?id="+jsonResponse[i].movie_id;
+
+                            let cTitle = document.createElement('h2');
+                            cTitle.innerHTML = title;
+                            cMovielink.appendChild(cTitle);
+                            contentDiv.appendChild(cMovielink);
 
                             let cHeader = document.createElement('h3');
                             cHeader.innerHTML = header;
