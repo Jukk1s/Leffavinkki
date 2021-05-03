@@ -63,15 +63,14 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
 //http://localhost:8081/users/register?name=nimi&password=salasana&email=sähköposti
 //http://localhost:8081/users/register?name=&password=&email=
     app.post('/users/register', (req,res) => {
-        var q = url.parse(req.url, true).query;
-        const user = { name: q.name, email: q.email, password: q.password };
-        const name = user.name;
-        const password = user.password;
-        const email = user.email;
+        const name = req.body.username;
+        const password = req.body.password;
+        const email = req.body.email;
         var sql = "SELECT * FROM users WHERE name = ? OR email = ?";
         var string;
+        console.log(name+password+email);
         if(!name || !password || !email)
-            res.send("Nimi, sähköposti tai salasana kenttä ei ole validi.")
+            res.header('register', "Rekisteröinti epäonnistui. Käyttäjänimi, sähköposti tai salasana on puutteelinen.").send();
         else
         (async () => {
             try {
@@ -79,7 +78,7 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
 
                 string = JSON.stringify(rows);
                 if(rows.length > 0){
-                    res.send("User '"+ name +"' or email '"+email+"' is already in use");
+                    res.header('register'," Rekisteröinti epäonnistui. Käyttäjänimi tai sähköposti on jo käytössä.").send();
                 } else {
 
                     sql = "INSERT INTO users (name, email, password) "
@@ -95,7 +94,7 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
                     sql = "INSERT INTO profiles (id) "
                         + "VALUES (?)"
                     const rows3 = await query(sql, [newUserId]);
-                    res.send(string);
+                    res.header('register',"onnistui").send();
                 }
             }
             catch (err){
