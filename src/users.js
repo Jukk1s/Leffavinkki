@@ -6,15 +6,14 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
     app.use(bodyParser.json('application/json'));
     app.use(cors({credentials: true, origin: true}));
 
+    //Palauttaa kaikkien käyttäjien nimet
     app.get('/users', cors(), (req, res) => {
-        var sql = "SELECT * FROM users";
+        var sql = "SELECT DISTINCT name FROM users";
         var string;
         (async () => {
             try {
                 const rows = await query(sql);
-                console.log(rows);
                 string = JSON.stringify(rows);
-                console.log(string);
                 res.send(string);
             }
             catch (err){
@@ -26,10 +25,12 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
         })()
     });
 
+    //Ottaa parametrina käyttäjän id:n tyyliin: /user?id=1
+    //ja palauttaa
     app.get('/user',cors(),(req,res) => {
         var q = url.parse(req.url, true).query;
         const userID = q.id;
-        var sql = "SELECT * FROM users WHERE id = ?";
+        var sql = "SELECT id, status, name FROM users WHERE id = ?";
         var string;
         if(!userID)
             res.send("Käyttäjän id ei ole validi.");
@@ -42,11 +43,11 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
 
                 //const obj1 = JSON.parse(rows[0]);
                 //const obj2 = JSON.parse(rows2[0]);
-                console.log(rows[0]);
+                //console.log(rows[0]);
                 let mergedObject = [];
                 mergedObject.push(rows[0]);
                 mergedObject.push(rows2[0]);
-                console.log("----"+JSON.stringify(mergedObject));
+                //console.log("----"+JSON.stringify(mergedObject));
                 //console.log(JSON.stringify(mergedObject));
                 string = JSON.stringify(mergedObject);
                 res.send(string);
@@ -68,7 +69,6 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
         const email = req.body.email;
         var sql = "SELECT * FROM users WHERE name = ? OR email = ?";
         var string;
-        console.log(name+password+email);
         if(!name || !password || !email)
             res.header('register', "Rekisteröinti epäonnistui. Käyttäjänimi, sähköposti tai salasana on puutteelinen.").send();
         else
@@ -83,14 +83,10 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
 
                     sql = "INSERT INTO users (name, email, password) "
                         + "VALUES (?, ?, SHA1(?))"
-
-                    console.log(name+" "+email+" "+password);
-
                     const rows2 = await query(sql, [name, email, password]);
                     string = JSON.stringify(rows2);
-                    console.log(string);
                     const newUserId = rows2.insertId;
-                    console.log("id: "+newUserId);
+                    console.log("Uusi käyttäjä, id: "+newUserId);
                     sql = "INSERT INTO profiles (id) "
                         + "VALUES (?)"
                     const rows3 = await query(sql, [newUserId]);
@@ -108,7 +104,6 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
 
     //http://localhost:8081/users/login?email=&password=
     app.post('/users/login',cors(), (req, res) => {
-        console.log(req.body);
         const email = req.body.email;
         const password = req.body.password;
         var sql = "SELECT * FROM users WHERE email = ? AND password = SHA1(?)";
@@ -122,12 +117,13 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
 
                 string = JSON.stringify(rows);
                 if(rows.length > 0){
-                    console.log("User logged in with id "+rows[0].id);
+                    console.log("Käyttäjä kirjautui, id "+rows[0].id);
                     //Tehdään token
                     const token = jwt.sign({id: rows[0].id}, process.env.TOKEN_SECRET);
                     res.header('auth-token', token);
                     res.header('username', rows[0].name);
                     res.header('email', rows[0].email);
+                    res.header('id', rows[0].id);
                     res.header("login", "Kirjautuminen onnistui.");
                     res.header("status", "success").send();
                 } else {

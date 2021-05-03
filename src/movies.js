@@ -13,9 +13,12 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
     app.use(bodyParser.json('application/json'));
     app.use(cors({credentials: true, origin: true}));
 
-
+    //Lisää kommentin elokuvaan. POST pyynnön täytyy sisältää auth-token, jolla
+    //palvelin varmentaa, että käyttäjä on kirjautunut ja mikä on käyttäjän ID.
+    //Tämän lisäksi tulisi pyynnön sisätlää kaikki kommenttiin liittyvät tiedot
+    //JSON-muodossa.
     app.post('/movies/addcomment', verify, (req, res, next) => {
-        console.log(readToken.readId(req.header('auth-token')));
+        //console.log(readToken.readId(req.header('auth-token')));
         //console.log(req);
 
         let commentHeader = req.body.header;
@@ -44,10 +47,15 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
     })
 
+    //Lisää arvostelun elokuvaan. Yksi arvostelu / käyttäjä.
+    //Middleware "verify" varmentaa POST pyynnön mukana lähetettävän
+    //auth-token headerin ja varmistaa käyttäjän kirjautumisen.
+    //Tämän lisäksi tulisi pyynnön sisältää arvosteluun tarvittavat tiedot
+    //JSON-muodossa.
     app.post('/movies/addrating', verify, (req, res) => {
-        console.log(readToken.readId(req.header('auth-token')));
+        //console.log(readToken.readId(req.header('auth-token')));
         let rating = req.body.rating;
-        console.log(req.body);
+        //console.log(req.body);
         let movieId = req.body.movie_id;
         let userId = req.user.id;
 
@@ -72,14 +80,13 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         }
     });
 
+    //Palauttaa elokuvat tietokannan "recommended" taulusta.
     app.get('/movies/recommended', cors(), (req, res) => {
-        console.log('get recommended');
         let sql = "SELECT * FROM recommended";
 
         (async () => {
             try {
                 const movies = await query(sql);
-                console.log(JSON.stringify(movies));
                 res.json(movies);
 
             }
@@ -92,6 +99,11 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         })();
     });
 
+    //Palauttaa omdbapi-apista haettavat elokuvat.
+    //Pyynnön tulee sisältää vähintään vähintään
+    //yksi parametri jolloin palvelin lähettää pyynnön
+    //eteen päin ja palauttaa apin JSON palautuksen
+    //käyttäjälle.
     app.get('/movies', cors(), function (req, res) {
 
         var q = url.parse(req.url, true).query;
@@ -190,7 +202,6 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
 
     //Palauttaa kaikki tietyn elokuvan arvostelut
     //movies/getreviews?id=elokuvanid
-
     app.get('/movies/getreviews', cors(), (req,res)=>{
         let q = url.parse(req.url, true).query;
         const movieId = q.id;
@@ -201,7 +212,6 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
         (async () => {
             try {
                 const reviews = await query(sql, [movieId]);
-                console.log(JSON.stringify(reviews));
                 res.json(reviews);
             }
             catch (err){
@@ -278,7 +288,7 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
     app.get('/usercomments', cors(), (req,res)=>{
         var q = url.parse(req.url, true).query;
         const profileId = q.id;
-        console.log('Searching for profile with id: '+profileId);
+        console.log(profileId);
 
         var string;
         (async () => {
@@ -291,7 +301,6 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
                     returnArray.push(rows[i]);
                 }
                 string = JSON.stringify(returnArray);
-             //   console.log(string);
                 res.json(returnArray);
 
 

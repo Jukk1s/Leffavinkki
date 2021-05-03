@@ -1,4 +1,31 @@
 const nodeServer = "http://localhost:8081";
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+let loadWelcome = urlParams.has('welcome');
+if(loadWelcome === true)
+    loadWelcome = urlParams.get('welcome');
+
+function onLoad(){
+    if(loadWelcome === "true")
+        getWelcome();
+    getRecommended();
+    showLastSearch();
+}
+
+function getWelcome(){
+    console.log("load welcome = "+loadWelcome);
+    const div = document.getElementById('welcome');
+    const name = localStorage.getItem('logged-user');
+    console.log(name);
+    //Katsotaan onko nimeä ja että nimessä on enemmän kuin 0 kirjainta
+    if(name){
+       let nameH = document.createElement('h2');
+       nameH.innerHTML = "Tervetuloa takaisin "+name+"!";
+       nameH.classList.add('centerText');
+       nameH.style.color = 'silver';
+       div.appendChild(nameH);
+    }
+}
 
 function getMovies() {
     <!--    HAETAAN NODE SERVERILTÄ    -->

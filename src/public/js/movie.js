@@ -215,9 +215,14 @@ function showComments(id){
                             cText.innerHTML = comment;
                             contentDiv.appendChild(cText);
 
+                            let cAuthorProfile = document.createElement('a');
+                            cAuthorProfile.href = nodeServer + "/profile?id="+userId;
+
                             let cAuthor = document.createElement('p');
                             cAuthor.innerHTML = "Käyttäjä: " + userName;
-                            contentDiv.appendChild(cAuthor);
+                            
+                            cAuthorProfile.appendChild(cAuthor);
+                            contentDiv.appendChild(cAuthorProfile);
 
                             let cRating = document.createElement("p");
                             cRating.innerHTML = review;

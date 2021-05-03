@@ -44,13 +44,22 @@ function showProfile(){
 
 function showResult(data){
     console.log(data);
-
     //data[0] sisältää users taulun käyttäjän tiedot
     //data[1] sisältää profiles taulun käyttäjän tiedot
     title.innerHTML = data[0].status;
     name.innerHTML = data[0].name;
+
+    //Katsotaan jos kirjautumisen ohella tallentuva käyttäjän id
+    //löytyy ja on sama kuin katsottavan profiilin niin lisätään
+    //nimeen myös indikaatio, että profiili on oma profiili.
+    //Ensimmäisessä if lauseessa plussataan paikalliseen tallennukseen
+    //tallennettu id ja palvelimen kyselyssä tullut id ja jos nämä
+    //voidaan muuttaa numeroksi niitä verrataan myöhemmin
+    if(Number(localStorage.getItem('logged-id')+data[0].id))
+        if(Number(localStorage.getItem('logged-id')) === Number(data[0].id))
+            name.innerHTML += " (sinä)";
     description.innerHTML = data[1].description;
-    showComments(data.id);
+    showComments(data[0].id);
 }
 
 //showcomments?id=elokuvanid
@@ -64,17 +73,15 @@ function showComments(id){
                 const response = await fetch(nodeServer+"/usercomments?id="+id);
                 if (response) {
                     const jsonResponse = await response.json();
-                    console.log(jsonResponse);
                     commentCount.innerHTML = jsonResponse.length;
                     reviewsCount.innerHTML = "Kommentit ("+jsonResponse.length+")";
                     for(var i = 0; i < jsonResponse.length; i++){
                         if(jsonResponse[i].hasOwnProperty('id')) {
-                            let reviewID = jsonResponse[i].reviews_id;
                             let commentID = jsonResponse[i].id;
                             let header = jsonResponse[i].header;
                             let comment = jsonResponse[i].comment;
                             let date = jsonResponse[i].date;
-                            console.log(reviewID+", "+commentID,+", "+header+", "+comment+", "+date);
+                            console.log(commentID,+", "+header+", "+comment+", "+date);
 
                             let cDiv = document.createElement('div');
                             cDiv.className = "comment";
@@ -89,12 +96,8 @@ function showComments(id){
                             contentDiv.appendChild(cHeader);
 
                             let cDate = document.createElement('h5');
-                            cDate.innerHTML = date;
+                            cDate.innerHTML = date.split('T')[0];
                             contentDiv.appendChild(cDate);
-
-                            let cAuthor = document.createElement('h4');
-                            cAuthor.innerHTML = reviewID;
-                            contentDiv.appendChild(cAuthor);
 
                             let cText = document.createElement('p');
                             cText.innerHTML = comment;

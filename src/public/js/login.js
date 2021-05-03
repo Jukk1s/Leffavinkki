@@ -13,18 +13,20 @@ $('#logform').submit(function(e){
         type: 'post',
         data: jsonFormData,
         success:function(){
-            saveLoginInfo(xhr.getResponseHeader("auth-token"),xhr.getResponseHeader("username"),xhr.getResponseHeader("email"));
+            saveLoginInfo(xhr.getResponseHeader("auth-token"),xhr.getResponseHeader("username"),xhr.getResponseHeader("email"),xhr.getResponseHeader("id"));
 
         }
     });
 });
 
-function saveLoginInfo(token, username, email) {
+function saveLoginInfo(token, username, email, id) {
     if (token != null) {
         console.log(token+username+email);
         localStorage.setItem("auth-token",token);
         localStorage.setItem("logged-user",username);
         localStorage.setItem("logged-email",email);
+        localStorage.setItem("logged-id", id);
+        window.open(nodeServer+"?welcome=true");
         console.log('Tervetuloa takaisin '+username+"!");
     } else {
         console.log("Kirjautuminen epäonnistui");
