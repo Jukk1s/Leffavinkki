@@ -4,24 +4,30 @@ $('#logform').submit(function(e){
 
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
-    console.log(email + password);
 
     var formData =  '{"email":"' + email + '", "password":"' + password + '"}';
     var jsonFormData = JSON.parse(formData);
-    console.log(JSON.stringify(jsonFormData));
 
-    console.log(jsonFormData);
     var xhr=$.ajax({
         url: nodeServer + '/users/login',
         type: 'post',
         data: jsonFormData,
         success:function(){
-            saveToken(xhr.getResponseHeader("auth-token"));
+            saveLoginInfo(xhr.getResponseHeader("auth-token"),xhr.getResponseHeader("username"),xhr.getResponseHeader("email"));
+
         }
     });
 });
 
-function saveToken(token) {
-    localStorage.setItem("auth-token",token);
-    console.log(token);
+function saveLoginInfo(token, username, email) {
+    if (token != null) {
+        console.log(token+username+email);
+        localStorage.setItem("auth-token",token);
+        localStorage.setItem("logged-user",username);
+        localStorage.setItem("logged-email",email);
+        console.log('Tervetuloa takaisin '+username+"!");
+    } else {
+        console.log("Kirjautuminen epäonnistui");
+    }
+
 }

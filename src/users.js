@@ -114,7 +114,7 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
         var sql = "SELECT * FROM users WHERE email = ? AND password = SHA1(?)";
         var string;
         if(!email || !password) {
-            res.header("login", "Sähköposti tai salasana ei ole määritetty.").send();
+            res.header("login", "Sähköposti tai salasana ei ole määritetty.");
             res.header("status", "failed").send();
         } else (async () => {
             try {
@@ -125,12 +125,14 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
                     console.log("User logged in with id "+rows[0].id);
                     //Tehdään token
                     const token = jwt.sign({id: rows[0].id}, process.env.TOKEN_SECRET);
-                    res.header('auth-token', token).send(token);
-                    res.header("login", "Kirjautuminen onnistui.").send();
+                    res.header('auth-token', token);
+                    res.header('username', rows[0].name);
+                    res.header('email', rows[0].email);
+                    res.header("login", "Kirjautuminen onnistui.");
                     res.header("status", "success").send();
                 } else {
                     string = JSON.stringify(rows);
-                    res.header("login", "Kirjautuminen onnistui. Sähköposti ja salasana eivät täsmää.").send();
+                    res.header("login", "Kirjautuminen epäonnistui. Sähköposti ja salasana eivät täsmää.");
                     res.header("status", "failed").send();
                 }
             }

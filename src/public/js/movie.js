@@ -7,10 +7,11 @@ const movieID = urlParams.get('id');
 const commentField = document.getElementById("newComment");
 const headerField = document.getElementById("newHeading");
 const authorizationToken = localStorage.getItem('auth-token');
+let reviewList = [];
 
 function onLoad(){
-    showMovie();
     getReviews();
+    showMovie();
 }
 
 const reviewStars = [
@@ -188,6 +189,15 @@ function showComments(id){
                             let userName = jsonResponse[i].name;
                         //    console.log(reviewID+", "+commentID,+", "+header+", "+comment+", "+date+", "+userId);
 
+                            let review = "Ei arvostelua";
+
+                            for(var l = reviewList.length-1; l >= 0; l--){
+                                if(reviewList[l].hasOwnProperty('id')) {
+                                    if (userId === reviewList[l].users_id) {
+                                        review = reviewList[l].review + "/5";
+                                    };
+                                }
+                            }
 
                             let cDiv = document.createElement('div');
                             cDiv.className = "comment";
@@ -208,6 +218,10 @@ function showComments(id){
                             let cAuthor = document.createElement('p');
                             cAuthor.innerHTML = "Käyttäjä: " + userName;
                             contentDiv.appendChild(cAuthor);
+
+                            let cRating = document.createElement("p");
+                            cRating.innerHTML = review;
+                            contentDiv.appendChild(cRating);
 
                             let cDate = document.createElement('h5');
                             cDate.innerHTML = date;
@@ -238,6 +252,7 @@ function getReviews(){
                 const response = await fetch(nodeServer+"/movies/getreviews?id="+movieID);
                 if (response) {
                     const jsonResponse = await response.json();
+                    reviewList = jsonResponse;
                     console.log(jsonResponse);
                     let reviewCount = 0;
                     let sum = 0;
