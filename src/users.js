@@ -1,7 +1,10 @@
 //Kirjautuminen - rekisteröityminen
 
-module.exports = function(app, cors, url, query, dotenv,jwt) {
+module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
     dotenv.config();
+    app.use(bodyParser.urlencoded({extended: false}));
+    app.use(bodyParser.json('application/json'));
+    app.use(cors({credentials: true, origin: true}));
 
     app.get('/users', cors(), (req, res) => {
         var sql = "SELECT * FROM users";
@@ -105,13 +108,14 @@ module.exports = function(app, cors, url, query, dotenv,jwt) {
     });
 
     //http://localhost:8081/users/login?email=&password=
-    app.get('/users/login',cors(), (req, res) => {
+    app.post('/users/login',cors(), (req, res) => {
         /*
         var q = url.parse(req.url, true).query;
         const user = { email: q.email, password: q.password };
         const email = user.email;
         const password = user.password;
         */
+        console.log(req.body);
         const email = req.body.email;
         const password = req.body.password;
         var sql = "SELECT * FROM users WHERE email = ? AND password = SHA1(?)";

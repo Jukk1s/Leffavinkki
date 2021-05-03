@@ -57,7 +57,7 @@ conn.connect(function(err){
 const query = util.promisify(conn.query).bind(conn);
 
 require('./routes')(app, cors);
-require('./users')(app, cors, url, query, dotenv,jwt);
+require('./users')(app, cors, url, query, dotenv,jwt, bodyParser);
 require('./movies')(app,cors, url, query, fetch, bodyParser);
 
 /*app.post('/process_post', urlencodedParser,

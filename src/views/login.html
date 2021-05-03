@@ -13,13 +13,16 @@
     <li><a href="register.html">Rekisteröinti</a></li>
 </ul>
 <div id="logregdiv">
-    <label class="labeli" for="email">Sähköposti:</label><br>
-    <input class="input" type="email" id="email" name="email"><br>
-    <label class="labeli" for="password">Salasana:</label><br>
-    <input class="input" type="text" min="4" id="password" name="password"><br><br>
-    <button id="regbutton" onclick="getMovies()">Kirjaudu sisään</button>
+    <form id="logform">
+        <label class="labeli" for="email">Sähköposti:</label><br>
+        <input class="input" type="email" id="email" name="email"><br>
+        <label class="labeli" for="password">Salasana:</label><br>
+        <input class="input" type="text" min="4" id="password" name="password"><br><br>
+        <input value="Kirjaudu sisään" type="submit"></input>
+    </form>
 </div>
-
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="/js/login.js"></script>
 
 </body>
 </html>
