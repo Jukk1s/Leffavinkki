@@ -106,10 +106,14 @@ module.exports = function(app, cors, url, query, dotenv,jwt) {
 
     //http://localhost:8081/users/login?email=&password=
     app.get('/users/login',cors(), (req, res) => {
+        /*
         var q = url.parse(req.url, true).query;
         const user = { email: q.email, password: q.password };
         const email = user.email;
         const password = user.password;
+        */
+        const email = req.body.email;
+        const password = req.body.password;
         var sql = "SELECT * FROM users WHERE email = ? AND password = SHA1(?)";
         var string;
         if(!email || !password)
