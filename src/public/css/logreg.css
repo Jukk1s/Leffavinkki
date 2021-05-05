@@ -50,6 +50,22 @@ body {
     margin-left: 29%;
 }
 
+#hakukentta {
+    position: relative;
+    display: list-item;
+    float: left;
+    right: 35%; /* 16px */
+    top: 1%; /* 76px */
+    left: 32%;
+    border: 3px solid black; /* 5px */
+    width: 18%;
+    height: 2%;
+    padding: 0.5%;
+    font-size: larger;
+    background-color: darkgrey;
+    border-radius: 4px;
+}
+
 .navbar {
     background-color: black;
     position: fixed;
@@ -70,7 +86,7 @@ ul {
 }
 
 li {
-    float: left;
+    float: right;
 }
 
 li a {
@@ -87,9 +103,17 @@ li a:hover:not(.active) {
     background-color: #333333;
 }
 
+home a:hover:not(.active) {
+    background-color: #333333;
+}
+
 .active {
     background-color: darkorange;
     border-radius: 4px;
+}
+
+.home {
+    float: left;
 }
 
 .keskita {
