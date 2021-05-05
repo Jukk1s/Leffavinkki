@@ -11,6 +11,7 @@
     margin-top: 20px;
     margin-left: auto; margin-right: auto;
     width: 80%;
+    box-shadow: 10px 10px rgba(40, 40, 40, 0.57);
 }
 
 #name, #title, #genres, #reviewsCount{
