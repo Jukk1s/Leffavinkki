@@ -9,25 +9,24 @@
 <body>
 
 <ul class="navbar">
-    <li><a href="index.htm">Etusivu</a></li>
-    <li><a href="credits.html">Tekijät</a></li>
+    <li class="home"><a href="index.htm">Etusivu</a></li>
     <li><a href="login.html">Kirjatuminen</a></li>
     <li class="active"><a href="register.html">Rekisteröinti</a></li>
     <div id="hakukentta">
         <input type="text" id="movie_name" placeholder="Elokuvan nimi:" name="movie_name">
-        <input type="number" min="0" id="movie_year" placeholder="Vuosi (valinnainen):" name="movie_year">
+        <input type="number" min="1888" max="2021" step="1" id="movie_year" placeholder="Vuosi (valinnainen):" name="movie_year">
         <button onclick="getMovies()">Hae</button>
     </div>
 </ul>
 
 <div id="logregdiv">
-    <form id="regfrom">
-        <label class="labeli" for="username">Käyttäjänimi:</label><br>
-        <input class="input" type="text" id="username" name="username" required><br>
-        <label class="labeli" for="email">Sähköposti:</label><br>
-        <input class="input" type="email" id="email" name="email" required><br>
-        <label class="labeli" for="password">Salasana:</label><br>
-        <input class="input" type="password" min="4" id="password" name="password" required><br><br>
+    <form id="regfrom" align="center">
+        <label for="username">Käyttäjänimi:</label><br>
+        <input type="text" id="username" name="username" required><br>
+        <label for="email">Sähköposti:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Salasana:</label><br>
+        <input type="password" min="4" id="password" name="password" required><br><br>
         <input type="submit" value="Luo käyttäjä"/>
         <div id="errorMessage"/>
     </form>

@@ -27,7 +27,8 @@ body {
     margin-right: auto;
     margin-top: 10%;
     height: 530px;
-    width: 24%;
+    min-width: 200px;
+    max-width: 600px;
     background-color: darkorange;
     border-radius: 8px;
     padding-top: 1%;
@@ -47,6 +48,22 @@ body {
 
 .input {
     margin-left: 29%;
+}
+
+#hakukentta {
+    position: relative;
+    display: list-item;
+    float: left;
+    right: 35%; /* 16px */
+    top: 1%; /* 76px */
+    left: 32%;
+    border: 3px solid black; /* 5px */
+    width: 18%;
+    height: 2%;
+    padding: 0.5%;
+    font-size: larger;
+    background-color: darkgrey;
+    border-radius: 4px;
 }
 
 .navbar {
@@ -69,7 +86,7 @@ ul {
 }
 
 li {
-    float: left;
+    float: right;
 }
 
 li a {
@@ -86,7 +103,20 @@ li a:hover:not(.active) {
     background-color: #333333;
 }
 
+home a:hover:not(.active) {
+    background-color: #333333;
+}
+
 .active {
     background-color: darkorange;
     border-radius: 4px;
+}
+
+.home {
+    float: left;
+}
+
+.keskita {
+    margin-left: auto;
+    margin-right: auto;
 }
