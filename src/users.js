@@ -1,5 +1,8 @@
 //Kirjautuminen - rekisteröityminen
 
+const verify = require('./verifyToken');
+const readToken = require('./readToken');
+
 module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
     dotenv.config();
     app.use(bodyParser.urlencoded({extended: false}));
@@ -60,6 +63,28 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
             }
         })();
     })
+
+    app.post('/users/edit', verify, (req,res) => {
+
+        let description = req.body.description;
+
+        if(description)
+            try {
+                (async () => {
+                    let sql = "UPDATE profiles SET description = ? WHERE id = ?";
+                    const rows = await query(sql, [description, readToken.readId(req.header('auth-token'))]);
+                    let string = JSON.stringify(rows);
+
+                    res.header('profile'," Profiilin kuvaus muokattu.").send();
+                })()
+
+            } catch (err) {
+                console.log("Database error! " + err);
+            }
+        else {
+            res.header('profile'," Profiilin kuvausta ei muokattu.").send();
+        }
+    });
 
 //http://localhost:8081/users/register?name=nimi&password=salasana&email=sähköposti
 //http://localhost:8081/users/register?name=&password=&email=

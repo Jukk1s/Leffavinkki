@@ -190,3 +190,10 @@ home a:hover:not(.active) {
     white-space: normal;
     color: white;
 }
+
+.editButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 47%;
+}

@@ -10,6 +10,7 @@ const description = document.getElementById('description');
 const reviews = document.getElementById("reviews");
 const status = document.getElementById('status');
 const mostViewed = document.getElementById('mostViewed');
+const authorizationToken = localStorage.getItem('auth-token');
 
 function showProfile(){
     const queryString = window.location.search;
@@ -48,6 +49,7 @@ function showResult(data){
     //data[1] sisältää profiles taulun käyttäjän tiedot
     title.innerHTML = data[0].status;
     name.innerHTML = data[0].name;
+    description.innerHTML = data[1].description;
 
     //Katsotaan jos kirjautumisen ohella tallentuva käyttäjän id
     //löytyy ja on sama kuin katsottavan profiilin niin lisätään
@@ -56,10 +58,39 @@ function showResult(data){
     //tallennettu id ja palvelimen kyselyssä tullut id ja jos nämä
     //voidaan muuttaa numeroksi niitä verrataan myöhemmin
     if(Number(localStorage.getItem('logged-id')+data[0].id))
-        if(Number(localStorage.getItem('logged-id')) === Number(data[0].id))
+        if(Number(localStorage.getItem('logged-id')) === Number(data[0].id)){
             name.innerHTML += " (sinä)";
-    description.innerHTML = data[1].description;
+            description.contentEditable = true;
+            let buttonDiv = document.getElementById("editButton");
+            let editButton = document.createElement('button');
+            editButton.onclick = function (){sendDescription()};
+            editButton.textContent = "Päivitä";
+            editButton.classList.add('editButton');
+            buttonDiv.appendChild(editButton);
+        }
     showComments(data[0].id);
+}
+
+function sendDescription(){
+    let newDescription = (document.getElementById('description').innerHTML).replace(/[\-[\]\\'/"]/g, "\\$&");
+    console.log(description);
+
+
+    var formData =  '{"description":"' + newDescription + '"}';
+    var jsonFormData = JSON.parse(formData);
+
+    console.log(jsonFormData);
+
+    $.ajax({
+        beforeSend: function(request) {
+            request.setRequestHeader("auth-token", authorizationToken);
+        },
+        url: nodeServer + "/users/edit",
+        type: 'post',
+        data: jsonFormData,
+        success:function(){
+        }
+    });
 }
 
 //showcomments?id=elokuvanid
