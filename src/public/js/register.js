@@ -26,4 +26,15 @@ $('#regform').submit(function(e){
 
 function registerState(state) {
     errorField.innerHTML = state;
+    if(state==="onnistui") {
+        logOut();
+        window.open(nodeServer + "/login", "_self");
+    }
+}
+
+function logOut() {
+    localStorage.setItem("auth-token", null);
+    localStorage.setItem("logged-user", null);
+    localStorage.setItem("logged-email", null);
+    localStorage.setItem("logged-id", null);
 }
