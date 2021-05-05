@@ -42,7 +42,7 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
 
     //Palauttaa kaikkien käyttäjien nimet
     app.get('/users', cors(), (req, res) => {
-        var sql = "SELECT DISTINCT name FROM users";
+        var sql = "SELECT DISTINCT id, name FROM users";
         var string;
         (async () => {
             try {
