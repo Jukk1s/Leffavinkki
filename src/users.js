@@ -40,6 +40,10 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
     });
      */
 
+    app.get('/users', verify, (req, res) => {
+        res.header('user-id', req.user.id).send();
+    });
+
     //Palauttaa kaikkien käyttäjien nimet
     app.get('/users', cors(), (req, res) => {
         var sql = "SELECT DISTINCT id, name FROM users";
