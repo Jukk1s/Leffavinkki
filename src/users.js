@@ -9,6 +9,37 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
     app.use(bodyParser.json('application/json'));
     app.use(cors({credentials: true, origin: true}));
 
+    /*
+    //Funktio korjaa profiilien arvostelu luvun oikeaksi.
+    app.get('/users/setreviews', cors(), (req, res) => {
+        var sql = "SELECT * FROM users";
+        var string;
+        (async () => {
+            try {
+                const rows = await query(sql);
+                if(rows.length > 0){
+                    for(let i = 0; i < rows.length; i++){
+                        if(rows[i].id){
+                            sql = "SELECT * FROM reviews WHERE users_id = ?";
+                            const rows2 = await query(sql,[rows[i].id]);
+                            sql = "UPDATE profiles SET reviews = ? WHERE id = ?";
+                            const rows3 = await query(sql,[rows2.length,rows[i].id]);
+                        }
+                    }
+                }
+                string = JSON.stringify(rows);
+                res.send("Arvostelujen luvut korjattu.");
+            }
+            catch (err){
+                console.log("Database error!"+err);
+            }
+            finally {
+
+            }
+        })()
+    });
+     */
+
     //Palauttaa kaikkien käyttäjien nimet
     app.get('/users', cors(), (req, res) => {
         var sql = "SELECT DISTINCT name FROM users";

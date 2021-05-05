@@ -3,9 +3,9 @@ const name = document.getElementById("name");
 const title = document.getElementById('title');
 const genres = document.getElementById('genres');
 const profilePic = document.getElementById('profilePicture');
-const reviewsCount = document.getElementById('reviewsCount');
-const reviewCounts = document.getElementsByClassName('reviewsCount');
-const commentCount = document.getElementById('commentCount');
+const reviewsCount = document.getElementById('reviewsC');
+const commentCount = document.getElementsByClassName('reviewsCount');
+//const commentCount = document.getElementById('commentCount');
 const description = document.getElementById('description');
 const reviews = document.getElementById("reviews");
 const status = document.getElementById('status');
@@ -50,6 +50,8 @@ function showResult(data){
     title.innerHTML = data[0].status;
     name.innerHTML = data[0].name;
     description.innerHTML = data[1].description;
+    reviewsCount.innerHTML = data[1].reviews;
+    status.innerHTML = calculateStatus(data);
 
     //Katsotaan jos kirjautumisen ohella tallentuva käyttäjän id
     //löytyy ja on sama kuin katsottavan profiilin niin lisätään
@@ -69,6 +71,23 @@ function showResult(data){
             buttonDiv.appendChild(editButton);
         }
     showComments(data[0].id);
+}
+
+function calculateStatus(data){
+    let r = Number(data[1].reviews);
+    if(r > 10)
+        return "Tunnustelija";
+    if(r > 25)
+        return "Herkistelijä";
+    if(r > 50)
+        return "Nautiskelija";
+    if(r > 100)
+        return "Minä tiedän elokuvista";
+    if(r > 200)
+        return "Poppari mies";
+    if(r > 500)
+        return "Leffanörtti, mestari";
+    return "Amatööri";
 }
 
 function sendDescription(){
@@ -104,8 +123,8 @@ function showComments(id){
                 const response = await fetch(nodeServer+"/usercomments?id="+id);
                 if (response) {
                     const jsonResponse = await response.json();
-                    commentCount.innerHTML = jsonResponse.length;
-                    reviewsCount.innerHTML = "Kommentit ("+jsonResponse.length+")";
+                    commentCount[1].innerHTML = jsonResponse.length;
+                    commentCount[0].innerHTML = "Kommentit ("+jsonResponse.length+")";
                     for(var i = jsonResponse.length-1; i >= 0; i--){
                         if(jsonResponse[i].hasOwnProperty('id')) {
                             let commentID = jsonResponse[i].id;
