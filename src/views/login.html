@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="/css/logreg.css" type="text/css" rel="stylesheet">
     <link href="/css/indexstyle.css" rel="stylesheet" type="text/css">
+    <link href="/css/footer.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -23,14 +25,27 @@
 
 <div id="logregdiv">
     <form id="logform" align="center">
-        <label for="email">Sähköposti:</label><br>
-        <input type="email" id="email" name="email" required><br>
-        <label for="password">Salasana:</label><br>
-        <input type="password" min="4" id="password" name="password" required><br><br>
-        <input value="Kirjaudu sisään" type="submit"></input>
-        <div id="errorMessage"/>
+        <label class="labeli" for="email">Sähköposti:</label><br>
+        <input class="input" type="email" id="email" name="email" required/><br>
+        <label class="labeli" for="password">Salasana:</label><br>
+        <input class="input" type="password" min="4" id="password" name="password" required/><br><br>
+        <input class="input" value="Kirjaudu sisään" type="submit"/>
+        <div id="errorMessage"></div>
     </form>
 </div>
+
+<footer>
+    <div id="footer-1">
+        <h4>Ryhmä ykkönen (1, eka)</h4>
+        <h5>Jukka Hallikainen</h5>
+        <h5>Eljas Hirvelä</h5>
+        <h5>Arttu Pösö</h5>
+        <img src="/img/leffavinkki.png">
+    </div>
+    <div id="footer-2">
+        <h4>Leffa vinkit jo vuodesta 2021!</h4>
+    </div>
+</footer>
 
 <script src="/js/jquery-3.6.0.min.js"></script>
 <script src="/js/login.js"></script>

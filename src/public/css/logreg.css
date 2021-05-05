@@ -31,8 +31,6 @@ body {
     max-width: 600px;
     background-color: darkorange;
     border-radius: 8px;
-    padding-top: 1%;
-    padding-left: 1%;
     font-size: 20px;
 }
 
@@ -43,11 +41,14 @@ body {
 }
 
 .labeli {
-    margin-left: 35%;
+    font-size: 30px;
 }
 
 .input {
-    margin-left: 29%;
+    font-size: 20px;
+}
+form {
+    padding-top: 15%;
 }
 
 #hakukentta {
@@ -114,9 +115,4 @@ home a:hover:not(.active) {
 
 .home {
     float: left;
-}
-
-.keskita {
-    margin-left: auto;
-    margin-right: auto;
 }
