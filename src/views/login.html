@@ -8,7 +8,7 @@
     <link href="/css/indexstyle.css" rel="stylesheet" type="text/css">
     <link href="/css/footer.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body onload="onLoad()">
 
 <ul class="navbar">
     <li class="home"><a href="index.htm">Etusivu</a></li>
@@ -21,18 +21,23 @@
     </div>
 </ul>
 
-<div class="spacediv"></div>
 
-<div id="logregdiv">
-    <form id="logform" align="center">
-        <label class="labeli" for="email">Sähköposti:</label><br>
-        <input class="input" type="email" id="email" name="email" required/><br>
-        <label class="labeli" for="password">Salasana:</label><br>
-        <input class="input" type="password" min="4" id="password" name="password" required/><br><br>
-        <input class="input" value="Kirjaudu sisään" type="submit"/>
-        <div id="errorMessage"></div>
-    </form>
-</div>
+    <div class="spacediv"></div>
+
+    <div id="logregdiv">
+        <form id="logform" align="center">
+            <label class="labeli" for="email">Sähköposti:</label><br>
+            <input class="input" type="email" id="email" name="email" required/><br>
+            <label class="labeli" for="password">Salasana:</label><br>
+            <input class="input" type="password" min="4" id="password" name="password" required/><br><br>
+            <input class="input" value="Kirjaudu sisään" type="submit"/>
+
+            <div id="errorMessage"></div>
+        </form>
+
+        <button id="logOutBtn" onclick="logOut()" value="Kirjaudu ulos">Kirjaudu ulos</button>
+    </div>
+
 
 <footer>
     <div id="footer-1">

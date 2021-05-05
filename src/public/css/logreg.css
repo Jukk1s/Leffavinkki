@@ -5,20 +5,17 @@ body {
     margin: 0;
 }
 
-#logindiv {
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10%;
-    height: 530px;
-    width: 25%;
-    background-color: darkorange;
-    border-radius: 8px;
-}
-
 .logreg_text {
     margin: 18px;
     padding-top: 13px;
+}
+
+#logOutBtn {
+    visibility: hidden;
+}
+
+#logform {
+    visibility: visible;
 }
 
 #logregdiv {
@@ -33,6 +30,7 @@ body {
     border-radius: 8px;
     font-size: 20px;
 }
+
 
 #regbutton {
     font-size: 18px;
