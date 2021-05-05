@@ -59,6 +59,7 @@
 body {
     font-family: Arial, Verdana, sans-serif;
     background-color: #333333;
+    background-image: linear-gradient(180deg,#333333,#999999);
     overflow: auto;
     margin: 0;
 }
@@ -75,25 +76,87 @@ body {
     top: 10%;
     margin-left: 15%;
     max-width: 70%;
+    padding: 0 24px 12px 36px;
     background-color: darkgrey;
+    border: 4px solid black;
     border-radius: 4px;
 }
 
+#search {
+    display: inline;
+    float: left;
+    font-size: large;
+}
 
 #hakukentta {
-    position: relative;
+    position: fixed;
     display: list-item;
     float: left;
-    right: 35%; /* 16px */
-    top: 1%; /* 76px */
-    left: 32%;
-    border: 3px solid black; /* 5px */
-    width: 18%;
-    height: 2%;
-    padding: 0.5%;
-    font-size: larger;
+    right: 30%;
+    top: 0%;
+    left: 30%;
+    border: 2px solid black;
+    width: 600px;
+    padding: 4px;
+    margin: 2px auto;
+    font-size: 16px;
     background-color: darkgrey;
     border-radius: 4px;
+    z-index: 9999;
+}
+
+.hakuwrapper {
+    margin: 6px 0;
+}
+
+.search-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
+}
+
+.button {
+    padding: 13px 16px;
+    margin-left: 96px;
+    min-height: 36px;
+    min-width: 100px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+
+#movie_name {
+    min-width: 150px;
+    padding: 10px 8px;
+    margin: 0 4px 0 0;
+    border: 1px solid #666;
+    border-radius: 5px;
+    height: 20px;
+    order: 0;
+    align-self: auto;
+    flex: 2 1 auto;
+}
+
+#movie_year {
+    min-width: 150px;
+    padding: 10px 8px;
+    margin: 0 4px 0 0;
+    border: 1px solid #666;
+    border-radius: 5px;
+    height: 20px;
+    order: 0;
+    align-self: auto;
+    flex: 1 1 auto;
+}
+
+.button {
+    order: 4;
+    flex: 0 1 auto;
+    align-self: auto;
 }
 
 .navbar {
@@ -101,7 +164,8 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 9999;
+    height: 71px;
+    z-index: 9998;
 }
 
 ul {
@@ -124,8 +188,12 @@ li a {
     color: white;
     text-align: center;
     padding: 14px 45px;
+    margin-top: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
     font-size: 25px;
     text-decoration: none;
+    border: 2px solid darkgrey;
     border-radius: 4px;
 }
 
@@ -137,10 +205,10 @@ home a:hover:not(.active) {
     background-color: #333333;
 }
 
-.active {
+/*.active {
     background-color: darkorange;
     border-radius: 4px;
-}
+}*/
 
 .home {
     float: left;
@@ -152,8 +220,19 @@ home a:hover:not(.active) {
 
 #toprow {
     padding: 10px;
+    padding-bottom: 50px;
     white-space: nowrap;
     overflow: hidden;
+    margin-right: auto; margin-left: auto;
+    margin-bottom: 32px;
+    width: 33%;
+    background-color: darkorange;
+    background-image: linear-gradient(180deg,darkorange,orange);
+    border: 4px solid black;
+    border-radius: 4px;
+}
+
+#recommended {
     width: fit-content;
     margin-right: auto; margin-left: auto;
 }
@@ -164,6 +243,7 @@ home a:hover:not(.active) {
 
 .recommendedDiv {
     margin-left: auto; margin-right: auto;
+    padding-left: 20px; padding-right: 20px;
     display: inline-block;
     vertical-align: middle;
     position: relative;
@@ -196,4 +276,10 @@ home a:hover:not(.active) {
     justify-content: center;
     align-items: center;
     margin-left: 47%;
+}
+
+#indexprofile {
+    margin-left: 90%;
+    position: absolute;
+    width: 150px;
 }

@@ -10,6 +10,13 @@ function onLoad(){
         getWelcome();
     getRecommended();
     showLastSearch();
+    onProfile()
+}
+
+function onProfile() {
+    if(localStorage.getItem("auth-token") && localStorage.getItem("auth-token").length>1) {
+        document.getElementById("indexprofile").addEventListener("click",function (){})
+    }
 }
 
 function getWelcome(){
