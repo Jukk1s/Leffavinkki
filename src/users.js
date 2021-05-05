@@ -40,7 +40,7 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
     });
      */
 
-    app.get('/users', verify, (req, res) => {
+    app.get('/users/getid', verify, (req, res) => {
         res.header('user-id', req.user.id).send();
     });
 
