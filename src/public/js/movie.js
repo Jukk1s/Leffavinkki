@@ -170,6 +170,9 @@ function showResult(data){
 
     img.src = data.Poster;
     img.alt = "Poster of " + data.Title;
+    img.onerror = function() {
+        this.src = '/img/poster_holder.jpg';
+    }
     plot.innerHTML = data.Plot;
     showComments(data.imdbID);
 }

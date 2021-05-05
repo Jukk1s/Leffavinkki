@@ -80,4 +80,15 @@ module.exports = function(app, cors) {
     app.get('/register',cors(), function (req, res) {
         res.sendFile( __dirname + "/views/" + "register.html" );
     });
+
+
+    app.get('/navbar.html',cors(), function (req, res) {
+        res.writeHead(301,
+            {Location: '/navbar'}
+        );
+        res.end();
+    });
+    app.get('/navbar',cors(), function (req, res) {
+        res.sendFile( __dirname + "/views/" + "navbar.html" );
+    });
 }
