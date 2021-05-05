@@ -1,10 +1,44 @@
 //Kirjautuminen - rekisteröityminen
 
+const verify = require('./verifyToken');
+const readToken = require('./readToken');
+
 module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
     dotenv.config();
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json('application/json'));
     app.use(cors({credentials: true, origin: true}));
+
+    /*
+    //Funktio korjaa profiilien arvostelu luvun oikeaksi.
+    app.get('/users/setreviews', cors(), (req, res) => {
+        var sql = "SELECT * FROM users";
+        var string;
+        (async () => {
+            try {
+                const rows = await query(sql);
+                if(rows.length > 0){
+                    for(let i = 0; i < rows.length; i++){
+                        if(rows[i].id){
+                            sql = "SELECT * FROM reviews WHERE users_id = ?";
+                            const rows2 = await query(sql,[rows[i].id]);
+                            sql = "UPDATE profiles SET reviews = ? WHERE id = ?";
+                            const rows3 = await query(sql,[rows2.length,rows[i].id]);
+                        }
+                    }
+                }
+                string = JSON.stringify(rows);
+                res.send("Arvostelujen luvut korjattu.");
+            }
+            catch (err){
+                console.log("Database error!"+err);
+            }
+            finally {
+
+            }
+        })()
+    });
+     */
 
     //Palauttaa kaikkien käyttäjien nimet
     app.get('/users', cors(), (req, res) => {
@@ -60,6 +94,28 @@ module.exports = function(app, cors, url, query, dotenv,jwt, bodyParser) {
             }
         })();
     })
+
+    app.post('/users/edit', verify, (req,res) => {
+
+        let description = req.body.description;
+
+        if(description)
+            try {
+                (async () => {
+                    let sql = "UPDATE profiles SET description = ? WHERE id = ?";
+                    const rows = await query(sql, [description, readToken.readId(req.header('auth-token'))]);
+                    let string = JSON.stringify(rows);
+
+                    res.header('profile'," Profiilin kuvaus muokattu.").send();
+                })()
+
+            } catch (err) {
+                console.log("Database error! " + err);
+            }
+        else {
+            res.header('profile'," Profiilin kuvausta ei muokattu.").send();
+        }
+    });
 
 //http://localhost:8081/users/register?name=nimi&password=salasana&email=sähköposti
 //http://localhost:8081/users/register?name=&password=&email=
