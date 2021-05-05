@@ -27,7 +27,8 @@ function getWelcome(){
     }
 }
 
-function getMovies() {
+$('#search').submit(function(e){
+    e.preventDefault();
     <!--    HAETAAN NODE SERVERILTÄ    -->
 
     let name = document.getElementById("movie_name").value.replace(/  +/g, '%20');
@@ -39,23 +40,17 @@ function getMovies() {
         movieYear = "&y=" + year;
     }
 
-    let url = nodeServer + "/movies?page=3&s=";
-
-    (async () => {
-        //console.log(url + name + movieYear + ", " + Number.isInteger(year) + year);
-        try{
-            const response = await fetch(url + name + movieYear);
-            if(response){
-                const jsonResponse = await response.json();
-                //console.log(jsonResponse);
-                localStorage.setItem("lastSearch", JSON.stringify(jsonResponse));
-                showResults(jsonResponse);
-            }
-        }catch(error){
-            console.log(error);
+    let xhr=$.ajax({
+        url: nodeServer + "/movies?page=3&s=" + name + movieYear,
+        type: 'get',
+        data: String,
+        success:function(data){
+            localStorage.setItem("lastSearch", JSON.stringify(data))
+            showResults(data);
         }
-    })();
-}
+    });
+
+});
 
 function getRecommended(){
     <!--    HAETAAN NODE SERVERILTÄ    -->
@@ -143,47 +138,51 @@ function showResults(jsonResponse) {
     //Tyhjennetään tuloskenttä ennen elokuvien näyttämistä
     div.innerHTML = "";
 
-    for (let i = 0; i < Object.keys(jsonResponse.Search).length; i++) {
-        //Jokaiselle elokuvalle oma a- ja div -elementti
-        let movieLink = document.createElement("a");
+    if (jsonResponse.Search) {
+        for (let i = 0; i < Object.keys(jsonResponse.Search).length; i++) {
+            //Jokaiselle elokuvalle oma a- ja div -elementti
+            let movieLink = document.createElement("a");
 
-        console.log(jsonResponse.Search[i].imdbID);
+            console.log(jsonResponse.Search[i].imdbID);
 
-        movieLink.href = "http://localhost:8081/movie?id="+jsonResponse.Search[i].imdbID;
+            movieLink.href = "http://localhost:8081/movie?id="+jsonResponse.Search[i].imdbID;
 
-        let movieDiv = document.createElement("div");
-        movieDiv.classList.add("movieDiv");
-        let h = document.createElement("h3");
-
-
-        //Elokuvan JSON
-        const data = jsonResponse.Search[i];
-        //console.log(data);
+            let movieDiv = document.createElement("div");
+            movieDiv.classList.add("movieDiv");
+            let h = document.createElement("h3");
 
 
-        movieDiv.addEventListener('click', function(){
-            console.log(data);
-            openMovie(data);
-        });
+            //Elokuvan JSON
+            const data = jsonResponse.Search[i];
+            //console.log(data);
 
 
-        h.innerHTML = jsonResponse.Search[i].Title + " (" + jsonResponse.Search[i].Year + ")";
-        movieDiv.appendChild(h);
+            movieDiv.addEventListener('click', function(){
+                console.log(data);
+                openMovie(data);
+            });
 
-        let img = document.createElement("img");
-        img.src = jsonResponse.Search[i].Poster;
-        img.alt = "Poster of " + jsonResponse.Search[i].Title;
 
-        //Jos kuva ei lataa
-        img.onerror = function() {
-            this.src = '/img/poster_holder.jpg';
+            h.innerHTML = jsonResponse.Search[i].Title + " (" + jsonResponse.Search[i].Year + ")";
+            movieDiv.appendChild(h);
+
+            let img = document.createElement("img");
+            img.src = jsonResponse.Search[i].Poster;
+            img.alt = "Poster of " + jsonResponse.Search[i].Title;
+
+            //Jos kuva ei lataa
+            img.onerror = function() {
+                this.src = '/img/poster_holder.jpg';
+            }
+            img.classList.add('poster');
+            movieDiv.appendChild(img);
+
+            movieLink.appendChild(movieDiv);
+            div.appendChild(movieLink);
         }
-        img.classList.add('poster');
-        movieDiv.appendChild(img);
-
-        movieLink.appendChild(movieDiv);
-        div.appendChild(movieLink);
     }
+
+
 }
 
 function onImgError(source){

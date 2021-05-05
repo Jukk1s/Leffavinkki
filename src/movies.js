@@ -177,8 +177,12 @@ module.exports = function(app, cors, url, query, fetch, bodyParser) {
                     for (let i = 2; i <= pagecount; i++) {
                         let response = await fetch(apiUrl + parameters + page + i + apiKeys[0]);
                         let reponseJSON = await response.json();
-                        for (let i = 0; i < Object.keys(reponseJSON.Search).length; i++) {
-                            jsonResponse.Search.push(reponseJSON.Search[i]);
+                        // console.log(JSON.stringify(reponseJSON));
+                        if (reponseJSON.Search) {
+                            for (let i = 0; i < Object.keys(reponseJSON.Search).length; i++) {
+                                jsonResponse.Search.push(reponseJSON.Search[i]);
+                                console.log(JSON.stringify(jsonResponse));
+                            }
                         }
                     }
                     if (movies) {
