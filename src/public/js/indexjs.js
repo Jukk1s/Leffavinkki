@@ -1,6 +1,7 @@
 const nodeServer = "http://localhost:8081";
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
+const authorizationToken = localStorage.getItem('auth-token');
 let loadWelcome = urlParams.has('welcome');
 if(loadWelcome === true)
     loadWelcome = urlParams.get('welcome');
@@ -13,9 +14,27 @@ function onLoad(){
     onProfile()
 }
 
+function openProfile(id) {
+    window.open(nodeServer + "/profile?id=" + id, "_self");
+}
+
 function onProfile() {
     if(localStorage.getItem("auth-token") && localStorage.getItem("auth-token").length>1) {
-        document.getElementById("indexprofile").addEventListener("click",function (){})
+        document.getElementById("indexprofile").addEventListener("click",function (){
+            var jsonFormData ="{}";
+            jsonFormData = JSON.parse(jsonFormData);
+            var xhr = $.ajax({
+                beforeSend: function(request) {
+                    request.setRequestHeader("auth-token", authorizationToken);
+                },
+                url: nodeServer + "/users/getid",
+                type: 'get',
+                data: jsonFormData,
+                success:function(){
+                    openProfile(xhr.getResponseHeader("user-id"));
+                }
+            });
+        })
     }
 }
 

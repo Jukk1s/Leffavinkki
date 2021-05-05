@@ -129,6 +129,10 @@ body {
     border-radius: 5px;
 }
 
+.button:hover {
+    background-color: #333333;
+}
+
 #movie_name {
     min-width: 150px;
     padding: 10px 8px;
@@ -282,4 +286,10 @@ home a:hover:not(.active) {
     margin-left: 90%;
     position: absolute;
     width: 150px;
+    cursor: pointer;
+    transition: transform .2s;
+}
+
+#indexprofile:hover {
+    transform: scale(1.1);
 }
