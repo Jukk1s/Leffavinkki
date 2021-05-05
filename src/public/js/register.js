@@ -1,7 +1,7 @@
 const nodeServer = "http://localhost:8081";
 const errorField = document.getElementById("errorMessage");
 
-$('#regfrom').submit(function(e){
+$('#regform').submit(function(e){
     e.preventDefault();
 
     var username = document.getElementById("username").value;

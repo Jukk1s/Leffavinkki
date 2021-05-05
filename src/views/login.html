@@ -12,14 +12,21 @@
 
 <ul class="navbar">
     <li class="home"><a href="index.htm">Etusivu</a></li>
-    <li class="active"><a href="login.html">Kirjatuminen</a></li>
+    <li class="active"><a href="login.html">Kirjautuminen</a></li>
     <li><a href="register.html">Rekisteröinti</a></li>
-    <div id="hakukentta">
-        <input type="text" id="movie_name" placeholder="Elokuvan nimi:" name="movie_name">
-        <input type="number" min="1888" max="2021" step="1" id="movie_year" placeholder="Vuosi (valinnainen):" name="movie_year">
-        <button onclick="getMovies()">Hae</button>
-    </div>
 </ul>
+
+<div id="hakukentta">
+    <form id="search">
+        <div class="hakuwrapper">
+            <div class="search-container">
+                <input type="text" id="movie_name" placeholder="Elokuvan nimi:" name="movie_name" required>
+                <input type="number" min="1888" max="2021" step="1" id="movie_year" placeholder="Vuosi (valinnainen):" name="movie_year">
+                <button type="submit" class="button">Hae</button>
+            </div>
+        </div>
+    </form>
+</div>
 
 
     <div class="spacediv"></div>
@@ -27,10 +34,10 @@
     <div id="logregdiv">
         <form id="logform" align="center">
             <label class="labeli" for="email">Sähköposti:</label><br>
-            <input class="input" type="email" id="email" name="email" required/><br>
+            <input class="inputti" type="email" id="email" name="email" required/><br>
             <label class="labeli" for="password">Salasana:</label><br>
-            <input class="input" type="password" min="4" id="password" name="password" required/><br><br>
-            <input class="input" value="Kirjaudu sisään" type="submit"/>
+            <input class="inputti" type="password" min="4" id="password" name="password" required/><br><br>
+            <input id="logInBtn" value="Kirjaudu sisään" type="submit"/>
 
             <div id="errorMessage"></div>
         </form>
@@ -48,7 +55,7 @@
         <img src="/img/leffavinkki.png">
     </div>
     <div id="footer-2">
-        <h4>Leffa vinkit jo vuodesta 2021!</h4>
+        <h4>Leffavinkit jo vuodesta 2021!</h4>
     </div>
 </footer>
 

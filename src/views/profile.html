@@ -12,16 +12,22 @@
 <body onload="showProfile()">
 
 <ul class="navbar">
-    <li><a href="index.htm">Etusivu</a></li>
-    <li><a href="credits.html">Tekijät</a></li>
+    <li class="home"><a href="index.htm">Etusivu</a></li>
     <li><a href="login.html">Kirjatuminen</a></li>
     <li><a href="register.html">Rekisteröinti</a></li>
-    <div id="hakukentta">
-        <input type="text" id="movie_name" placeholder="Elokuvan nimi:" name="movie_name">
-        <input type="number" min="0" id="movie_year" placeholder="Vuosi (valinnainen):" name="movie_year">
-        <button onclick="getMovies()">Hae</button>
-    </div>
 </ul>
+
+<div id="hakukentta">
+    <form id="search">
+        <div class="hakuwrapper">
+            <div class="search-container">
+                <input type="text" id="movie_name" placeholder="Elokuvan nimi:" name="movie_name" required>
+                <input type="number" min="1888" max="2021" step="1" id="movie_year" placeholder="Vuosi (valinnainen):" name="movie_year">
+                <button type="submit" class="button">Hae</button>
+            </div>
+        </div>
+    </form>
+</div>
 
 <div id="top">
     <h1 id="name">Käyttäjätunnus</h1>
