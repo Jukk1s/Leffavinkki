@@ -27,7 +27,8 @@ body {
     margin-right: auto;
     margin-top: 10%;
     height: 530px;
-    width: 24%;
+    min-width: 200px;
+    max-width: 600px;
     background-color: darkorange;
     border-radius: 8px;
     padding-top: 1%;
@@ -89,4 +90,9 @@ li a:hover:not(.active) {
 .active {
     background-color: darkorange;
     border-radius: 4px;
+}
+
+.keskita {
+    margin-left: auto;
+    margin-right: auto;
 }

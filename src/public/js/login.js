@@ -28,8 +28,7 @@ function saveLoginInfo(token, username, email, id) {
         localStorage.setItem("logged-user",username);
         localStorage.setItem("logged-email",email);
         localStorage.setItem("logged-id", id);
-        window.open(nodeServer+"?welcome=true");
-        console.log('Tervetuloa takaisin '+username+"!");
+        window.open(nodeServer+"?welcome=true","_self");
     } else {
         errorField.innerHTML = "Väärä käyttäjätunnus tai salasana.";
     }
