@@ -1,4 +1,6 @@
 const nodeServer = "http://localhost:8081";
+const errorField = document.getElementById("errorMessage");
+
 $('#regfrom').submit(function(e){
     e.preventDefault();
 
@@ -19,8 +21,9 @@ $('#regfrom').submit(function(e){
             registerState(xhr.getResponseHeader("register"));
         }
     });
+
 });
 
 function registerState(state) {
-    console.log(state);
+    errorField.innerHTML = state;
 }
