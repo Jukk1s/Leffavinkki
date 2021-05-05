@@ -1,4 +1,6 @@
 const nodeServer = "http://localhost:8081";
+const errorField = document.getElementById("errorMessage");
+
 $('#logform').submit(function(e){
     e.preventDefault();
 
@@ -29,7 +31,7 @@ function saveLoginInfo(token, username, email, id) {
         window.open(nodeServer+"?welcome=true");
         console.log('Tervetuloa takaisin '+username+"!");
     } else {
-        console.log("Kirjautuminen epäonnistui");
+        errorField.innerHTML = "Väärä käyttäjätunnus tai salasana.";
     }
 
 }

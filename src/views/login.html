@@ -15,12 +15,14 @@
 <div id="logregdiv">
     <form id="logform">
         <label class="labeli" for="email">Sähköposti:</label><br>
-        <input class="input" type="email" id="email" name="email"><br>
+        <input class="input" type="email" id="email" name="email" required><br>
         <label class="labeli" for="password">Salasana:</label><br>
-        <input class="input" type="password" min="4" id="password" name="password"><br><br>
+        <input class="input" type="password" min="4" id="password" name="password" required><br><br>
         <input value="Kirjaudu sisään" type="submit"></input>
+        <div id="errorMessage"/>
     </form>
 </div>
+
 <script src="/js/jquery-3.6.0.min.js"></script>
 <script src="/js/login.js"></script>
 
