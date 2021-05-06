@@ -15,7 +15,10 @@ function onLoad(){
 }
 
 function openProfile(id) {
-    window.open(nodeServer + "/profile?id=" + id, "_self");
+    if(id === "login")
+        window.open(nodeServer + "/login", "_self");
+    else
+        window.open(nodeServer + "/profile?id=" + id, "_self");
 }
 
 function onProfile() {
@@ -32,6 +35,9 @@ function onProfile() {
                 data: jsonFormData,
                 success:function(){
                     openProfile(xhr.getResponseHeader("user-id"));
+                },
+                error:function(){
+                    openProfile("login");
                 }
             });
         })
