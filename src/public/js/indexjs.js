@@ -53,11 +53,21 @@ function getWelcome(){
     }
 }
 
+function removeAekkoset(str){
+    console.log(str);
+    str = str.replace(/ä/g, 'a');
+    console.log("-->"+str);
+    str = str.replace(/ö/g, 'o');
+    console.log("-->"+str);
+    return str;
+}
+
 $('#search').submit(function(e){
     e.preventDefault();
     <!--    HAETAAN NODE SERVERILTÄ    -->
-
-    let name = document.getElementById("movie_name").value.replace(/  +/g, '%20');
+//replace(/[\-[\]\\'/"]/g, "\\$&");
+    let name = document.getElementById("movie_name").value.toLowerCase().replace(/  +/g, '%20').replace(/[\-[\]\\'/"]/g, "\\$&");
+    name = removeAekkoset(name);
     let year = Number(document.getElementById("movie_year").value);
 
     let movieYear = "";
