@@ -48,6 +48,10 @@
     padding: 10px 10% 10px 10%;
 }
 
+#comments {
+    padding-bottom: 50px;
+}
+
 .comment {
     background-color: darkorange;
     background-image: linear-gradient(180deg,darkorange,orange);

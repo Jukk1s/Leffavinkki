@@ -61,3 +61,7 @@
     padding: 15px;
     margin: 40px 40px 20px 10px;
 }
+
+.orangeBorder {
+    border: darkorange 2px solid;
+}

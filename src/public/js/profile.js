@@ -63,6 +63,7 @@ function showResult(data){
         if(Number(localStorage.getItem('logged-id')) === Number(data[0].id)){
             name.innerHTML += " (sinä)";
             description.contentEditable = true;
+            description.classList.add('orangeBorder');
             let buttonDiv = document.getElementById("editButton");
             let editButton = document.createElement('button');
             editButton.onclick = function (){sendDescription()};
